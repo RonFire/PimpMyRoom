@@ -11,4 +11,11 @@
 
 #include <stdio.h>
 
+class Visualizer {
+	
+public:
+	
+	int doVisualisation();
+};
+
 #endif /* Visualizer_hpp */
