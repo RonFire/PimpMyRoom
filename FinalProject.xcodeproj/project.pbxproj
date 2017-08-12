@@ -11,6 +11,7 @@
 		1816D77B1F39CCAB0050F336 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1816D77A1F39CCAB0050F336 /* OpenGL.framework */; };
 		1816D77D1F39CCD40050F336 /* libGLEW.2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1816D77C1F39CCD40050F336 /* libGLEW.2.0.0.dylib */; };
 		1816D77F1F39CCE70050F336 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1816D77E1F39CCE70050F336 /* libglfw.3.2.dylib */; };
+		186C421F1F3F77C900B45785 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 186C421D1F3F77C900B45785 /* Shader.cpp */; };
 		1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1878A9971F3E280E00B0C0DC /* Visualizer.cpp */; };
 		18D995021F3A0DC50012551B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 18D995011F3A0DC50012551B /* glad.c */; };
 /* End PBXBuildFile section */
@@ -33,6 +34,10 @@
 		1816D77A1F39CCAB0050F336 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		1816D77C1F39CCD40050F336 /* libGLEW.2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.0.0.dylib; path = ../../../../../../../../usr/local/Cellar/glew/2.0.0/lib/libGLEW.2.0.0.dylib; sourceTree = "<group>"; };
 		1816D77E1F39CCE70050F336 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
+		186C421D1F3F77C900B45785 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
+		186C421E1F3F77C900B45785 /* Shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
+		186C42201F3F7E0A00B45785 /* VertexShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = VertexShader.glsl; sourceTree = "<group>"; };
+		186C42211F3F7E5200B45785 /* FragmentShader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FragmentShader.glsl; sourceTree = "<group>"; };
 		1878A9971F3E280E00B0C0DC /* Visualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Visualizer.cpp; sourceTree = "<group>"; };
 		1878A9981F3E280E00B0C0DC /* Visualizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Visualizer.hpp; sourceTree = "<group>"; };
 		18D995011F3A0DC50012551B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
@@ -76,6 +81,10 @@
 				1816D7721F39CC160050F336 /* main.cpp */,
 				1878A9971F3E280E00B0C0DC /* Visualizer.cpp */,
 				1878A9981F3E280E00B0C0DC /* Visualizer.hpp */,
+				186C421D1F3F77C900B45785 /* Shader.cpp */,
+				186C421E1F3F77C900B45785 /* Shader.hpp */,
+				186C42201F3F7E0A00B45785 /* VertexShader.glsl */,
+				186C42211F3F7E5200B45785 /* FragmentShader.glsl */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -150,6 +159,7 @@
 			files = (
 				1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */,
 				1816D7731F39CC160050F336 /* main.cpp in Sources */,
+				186C421F1F3F77C900B45785 /* Shader.cpp in Sources */,
 				18D995021F3A0DC50012551B /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
