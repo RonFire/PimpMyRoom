@@ -113,7 +113,7 @@ int Visualizer::doVisualisation() {
 	//	shader handling
 	//	===============
 	
-	Shader ourShader("VertexShader.glsl", "FragmentShader.glsl");
+	Shader ourShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	
 	// ===============
 	// Texture Code
@@ -130,7 +130,7 @@ int Visualizer::doVisualisation() {
 	
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
-	unsigned char *data = stbi_load("Resource/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char *data = stbi_load("resource/textures/container.jpg", &width, &height, &nrChannels, 0);
 	if(data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -147,7 +147,7 @@ int Visualizer::doVisualisation() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	
-	data = stbi_load("Resource/awesomeface.png", &width, &height, &nrChannels, 0);
+	data = stbi_load("resource/textures/awesomeface.png", &width, &height, &nrChannels, 0);
 	if(data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
