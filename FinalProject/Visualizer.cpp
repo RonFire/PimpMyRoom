@@ -14,6 +14,9 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -160,7 +163,6 @@ int Visualizer::doVisualisation() {
 	ourShader.setInt("texture1", 0);
 	ourShader.setInt("texture2", 1);
 	
-	
 	//	=======================
 	//	rendering loop starts here
 	//	=======================
@@ -183,7 +185,17 @@ int Visualizer::doVisualisation() {
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 		
+		// create transformation
+		glm::mat4 transformation;
+		transformation = glm::translate(transformation, glm::vec3(0.5f, -0.5f, 0.0f));
+		transformation = glm::rotate(transformation, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		
 		ourShader.use();
+		
+		// passing transformation to shader
+		unsigned int transformLocation = glGetUniformLocation(ourShader.ID, "transform");
+		glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(transformation));
+		
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
