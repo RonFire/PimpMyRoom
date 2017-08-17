@@ -19,11 +19,28 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+// camera
+glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+
+bool firstMouse = true;
+float yaw   = -90.0f;
+float pitch =  0.0f;
+float lastX = 400, lastY = 300;
+float fov   =  45.0f;
+
+// timing
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f; // time of last frame
 
 
 int Visualizer::doVisualisation() {
@@ -51,6 +68,8 @@ int Visualizer::doVisualisation() {
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 	
 	//	==============
 	//	initialize glad -> load function pointers
@@ -63,6 +82,9 @@ int Visualizer::doVisualisation() {
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	// cursor configuration
+	// --------------------
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	//	===============
 	//	vertex data
@@ -216,6 +238,11 @@ int Visualizer::doVisualisation() {
 	//	=======================
 	while(!glfwWindowShouldClose(window))
 	{
+		// per frame time logic
+		// ====================
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 		
 		// check for input
 		// ===============
@@ -236,13 +263,13 @@ int Visualizer::doVisualisation() {
 		// ====================
 		// example Camera configuration
 		// ====================
-		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
-		
-		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
-		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+//		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+//		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+//		glm::vec3 cameraDirection = glm::normalize(cameraPos - cameraTarget);
+//		
+//		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+//		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
+//		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
 		
 		ourShader.use();
 		// model matrix
@@ -251,17 +278,14 @@ int Visualizer::doVisualisation() {
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		// view matrix with camera
 		// -----------------------
-		float radius = 10.0f;
-		float camX = sin(glfwGetTime()) * radius;
-		float camZ = cos(glfwGetTime()) * radius;
 		glm::mat4 view;
-		view = glm::lookAt(glm::vec3(camX, 0.0, camZ),
-						   glm::vec3(0.0f, 0.0f, 0.0f),
-						   glm::vec3(0.0f, 1.0f, 0.0f));
+		view = glm::lookAt(cameraPos,
+						   cameraPos + cameraFront,
+						   cameraUp);
 		// projection matrix
 		// -----------------
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(55.0f), (float)width/(float)height, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(fov), (float)width/(float)height, 0.1f, 100.0f);
 		
 		
 		// passing transformation to shader
@@ -302,13 +326,80 @@ int Visualizer::doVisualisation() {
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ======================================================================
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
+// ==============================================================
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	if (firstMouse) {
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+	
+	float sensitivity = 0.08f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+	
+	yaw += xoffset;
+	pitch += yoffset;
+	
+	if(pitch > 89.0f)
+	pitch =  89.0f;
+	if(pitch < -89.0f)
+	pitch = -89.0f;
+	
+	glm::vec3 front;
+	front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
+	front.y = sin(glm::radians(pitch));
+	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
+	cameraFront = glm::normalize(front);
+}
+// ==============================================================
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	if(fov >= 1.0f && fov <= 55.0f)
+		fov -= yoffset;
+	if(fov <= 1.0f)
+		fov = 1.0f;
+	if(fov >= 55.0f)
+		fov = 55.0f;
+}
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ====================================================================================================
 void processInput(GLFWwindow *window)
 {
-	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+	float cameraSpeed = 2.5f * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraUp;
+	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraUp;
 }
+
+
+
+
+
+
+
+
+
+
+
