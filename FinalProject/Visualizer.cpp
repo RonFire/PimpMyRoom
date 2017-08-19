@@ -288,14 +288,21 @@ int Visualizer::doVisualisation() {
 //		glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 //		glm::vec3 cameraRight = glm::normalize(glm::cross(up, cameraDirection));
 //		glm::vec3 cameraUp = glm::cross(cameraDirection, cameraRight);
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+  
+		glm::vec3 diffuseColor = lightColor   * glm::vec3(0.5f); // decrease the influence
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f); // low influence
 		
 		ourShader.use();
 		ourShader.setVec3("material.ambient",  1.0f, 0.5f, 0.31f);
 		ourShader.setVec3("material.diffuse",  1.0f, 0.5f, 0.31f);
 		ourShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		ourShader.setFloat("material.shininess", 32.0f);
-		ourShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		ourShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+		ourShader.setVec3("light.ambient", ambientColor);
+		ourShader.setVec3("light.diffuse", diffuseColor);
 		ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 		ourShader.setVec3("lightPosition", lightPos);
 		ourShader.setVec3("viewPosition", camera.Position);
