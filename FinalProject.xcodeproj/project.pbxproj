@@ -30,6 +30,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18137D331F477FC000559FA7 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		1816D76F1F39CC160050F336 /* FinalProject */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FinalProject; sourceTree = BUILT_PRODUCTS_DIR; };
 		1816D7721F39CC160050F336 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1816D77A1F39CCAB0050F336 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -90,6 +91,7 @@
 				186C421E1F3F77C900B45785 /* Shader.hpp */,
 				186C42231F40DF5000B45785 /* stb_image.cpp */,
 				186C42241F40DF5000B45785 /* stb_image.hpp */,
+				18137D331F477FC000559FA7 /* Camera.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
