@@ -15,6 +15,7 @@
 		186C42251F40DF5000B45785 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 186C42231F40DF5000B45785 /* stb_image.cpp */; };
 		1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1878A9971F3E280E00B0C0DC /* Visualizer.cpp */; };
 		18ADC7ED1F48EA8D00080451 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ADC7EC1F48EA8D00080451 /* libassimp.4.0.1.dylib */; };
+		18BA1D9C1F49A10100C5DF92 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */; };
 		18D995021F3A0DC50012551B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 18D995011F3A0DC50012551B /* glad.c */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,8 @@
 		1878A9971F3E280E00B0C0DC /* Visualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Visualizer.cpp; sourceTree = "<group>"; };
 		1878A9981F3E280E00B0C0DC /* Visualizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Visualizer.hpp; sourceTree = "<group>"; };
 		18ADC7EC1F48EA8D00080451 /* libassimp.4.0.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.0.1.dylib; path = ../../../../../../../../usr/local/Cellar/assimp/4.0.1/lib/libassimp.4.0.1.dylib; sourceTree = "<group>"; };
+		18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
 		18D995011F3A0DC50012551B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +98,8 @@
 				186C42231F40DF5000B45785 /* stb_image.cpp */,
 				186C42241F40DF5000B45785 /* stb_image.hpp */,
 				18137D331F477FC000559FA7 /* Camera.hpp */,
+				18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */,
+				18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -168,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18BA1D9C1F49A10100C5DF92 /* Mesh.cpp in Sources */,
 				1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */,
 				1816D7731F39CC160050F336 /* main.cpp in Sources */,
 				186C42251F40DF5000B45785 /* stb_image.cpp in Sources */,
