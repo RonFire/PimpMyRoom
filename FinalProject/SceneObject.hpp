@@ -23,6 +23,7 @@ public:
 	std::vector<SceneObject*> children = {};
 	
 	glm::vec3 position = glm::vec3(0.0);
+	GLfloat angle = 0.0;
 	glm::mat4 model = glm::mat4(1.0);
 	
 	SceneObject();
