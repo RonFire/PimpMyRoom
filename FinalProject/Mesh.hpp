@@ -22,29 +22,41 @@
 #include <math.h>
 #include <iostream>
 
-#include <GLFW/glfw3.h>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <vector>
 
 
 struct Vertex {
+	// position
 	glm::vec3 Position;
+	// normal
 	glm::vec3 Normal;
-	glm::vec3 TexCoords;
+	// texCoords
+	glm::vec2 TexCoords;
+	// tangent
+	glm::vec3 Tangent;
+	// bitangent
+	glm::vec3 Bitangent;
 };
 
-struct Teture {
+struct Texture {
 	unsigned int id;
-	string type;
+	std::string type;
+	aiString path;
 };
 
 class Mesh
 {
 public:
 	// Mesh Data
-	vector<Vertex> vertices;
-	vector<unsigned int> indices;
-	vector<Texture> textures;
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<Texture> textures;
 	// Functions
-	Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 	void Draw(Shader shader);
 	
 private:

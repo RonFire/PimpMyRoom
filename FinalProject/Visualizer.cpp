@@ -9,6 +9,7 @@
 #include "Camera.hpp"
 #include "Visualizer.hpp"
 #include "Shader.hpp"
+#include "Model.hpp"
 #include "stb_image.hpp"
 #include <iostream>
 #include <math.h>
@@ -213,12 +214,15 @@ int Visualizer::doVisualisation() {
 	
 	Shader ourShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader lampShader("shaders/LampVertexShader.glsl", "shaders/LampFragmentShader.glsl");
+	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
 	
 	// ===============
 	// Texture Code
 	// ===============
 	unsigned int diffuseMap = loadTexture("resource/textures/container.png");
 	unsigned int specularMap = loadTexture("resource/textures/container_specular.png");
+	
+	Model ourModel("resource/nanosuit/nanosuit.obj");
 	
 	ourShader.use();
 	ourShader.setInt("material.diffuse", 0);
@@ -332,6 +336,16 @@ int Visualizer::doVisualisation() {
 			glBindVertexArray(lightVAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+		
+		// render the loaded model
+		modelShader.use();
+		modelShader.setMat4("projection", projection);
+		modelShader.setMat4("view", view);
+		glm::mat4 modelModel;
+		modelModel = glm::translate(modelModel, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		modelModel = glm::scale(modelModel, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		modelShader.setMat4("model", modelModel);
+		ourModel.Draw(ourShader);
 		
 //		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		

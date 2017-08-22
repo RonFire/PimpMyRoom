@@ -17,6 +17,7 @@
 		18ADC7ED1F48EA8D00080451 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ADC7EC1F48EA8D00080451 /* libassimp.4.0.1.dylib */; };
 		18BA1D9C1F49A10100C5DF92 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */; };
 		18D995021F3A0DC50012551B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 18D995011F3A0DC50012551B /* glad.c */; };
+		18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F720631F4C34BD00EC4B3A /* Model.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +51,8 @@
 		18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
 		18D995011F3A0DC50012551B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		18F720631F4C34BD00EC4B3A /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		18F720641F4C34BD00EC4B3A /* Model.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +103,8 @@
 				18137D331F477FC000559FA7 /* Camera.hpp */,
 				18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */,
 				18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */,
+				18F720631F4C34BD00EC4B3A /* Model.cpp */,
+				18F720641F4C34BD00EC4B3A /* Model.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -177,6 +182,7 @@
 				1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */,
 				1816D7731F39CC160050F336 /* main.cpp in Sources */,
 				186C42251F40DF5000B45785 /* stb_image.cpp in Sources */,
+				18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */,
 				186C421F1F3F77C900B45785 /* Shader.cpp in Sources */,
 				18D995021F3A0DC50012551B /* glad.c in Sources */,
 			);
