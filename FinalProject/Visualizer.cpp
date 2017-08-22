@@ -222,7 +222,7 @@ int Visualizer::doVisualisation() {
 	unsigned int diffuseMap = loadTexture("resource/textures/container.png");
 	unsigned int specularMap = loadTexture("resource/textures/container_specular.png");
 	
-	Model ourModel("resource/nanosuit/nanosuit.obj");
+	Model ourModel("resource/Nanosuit2/nanosuit2.obj");
 	
 	ourShader.use();
 	ourShader.setInt("material.diffuse", 0);
