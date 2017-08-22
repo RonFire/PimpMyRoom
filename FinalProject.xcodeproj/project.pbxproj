@@ -11,6 +11,7 @@
 		1816D77B1F39CCAB0050F336 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1816D77A1F39CCAB0050F336 /* OpenGL.framework */; };
 		1816D77D1F39CCD40050F336 /* libGLEW.2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1816D77C1F39CCD40050F336 /* libGLEW.2.0.0.dylib */; };
 		1816D77F1F39CCE70050F336 /* libglfw.3.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1816D77E1F39CCE70050F336 /* libglfw.3.2.dylib */; };
+		183C4AFD1F4CB33900959C6F /* SceneObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 183C4AFB1F4CB33900959C6F /* SceneObject.cpp */; };
 		186C421F1F3F77C900B45785 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 186C421D1F3F77C900B45785 /* Shader.cpp */; };
 		186C42251F40DF5000B45785 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 186C42231F40DF5000B45785 /* stb_image.cpp */; };
 		1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1878A9971F3E280E00B0C0DC /* Visualizer.cpp */; };
@@ -39,6 +40,8 @@
 		1816D77A1F39CCAB0050F336 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		1816D77C1F39CCD40050F336 /* libGLEW.2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.0.0.dylib; path = ../../../../../../../../usr/local/Cellar/glew/2.0.0/lib/libGLEW.2.0.0.dylib; sourceTree = "<group>"; };
 		1816D77E1F39CCE70050F336 /* libglfw.3.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.2.dylib; path = ../../../../../../../../usr/local/Cellar/glfw/3.2.1/lib/libglfw.3.2.dylib; sourceTree = "<group>"; };
+		183C4AFB1F4CB33900959C6F /* SceneObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cpp; sourceTree = "<group>"; };
+		183C4AFC1F4CB33900959C6F /* SceneObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneObject.hpp; sourceTree = "<group>"; };
 		186AC6731F42B59000ED2F38 /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = shaders; sourceTree = "<group>"; };
 		186C421D1F3F77C900B45785 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		186C421E1F3F77C900B45785 /* Shader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
@@ -105,6 +108,8 @@
 				18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */,
 				18F720631F4C34BD00EC4B3A /* Model.cpp */,
 				18F720641F4C34BD00EC4B3A /* Model.hpp */,
+				183C4AFB1F4CB33900959C6F /* SceneObject.cpp */,
+				183C4AFC1F4CB33900959C6F /* SceneObject.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 				1816D7731F39CC160050F336 /* main.cpp in Sources */,
 				186C42251F40DF5000B45785 /* stb_image.cpp in Sources */,
 				18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */,
+				183C4AFD1F4CB33900959C6F /* SceneObject.cpp in Sources */,
 				186C421F1F3F77C900B45785 /* Shader.cpp in Sources */,
 				18D995021F3A0DC50012551B /* glad.c in Sources */,
 			);

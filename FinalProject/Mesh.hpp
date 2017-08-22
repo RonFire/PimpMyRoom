@@ -9,23 +9,9 @@
 #ifndef Mesh_hpp
 #define Mesh_hpp
 
-#include <glad/glad.h>
-
 #include <assimp/Importer.hpp>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Shader.hpp"
-
-#include <math.h>
-#include <iostream>
-
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <vector>
 
 
