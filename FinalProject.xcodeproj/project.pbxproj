@@ -18,6 +18,7 @@
 		18BA1D9C1F49A10100C5DF92 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */; };
 		18D995021F3A0DC50012551B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 18D995011F3A0DC50012551B /* glad.c */; };
 		18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F720631F4C34BD00EC4B3A /* Model.cpp */; };
+		F65D6ACB1F4C7A7D0036A224 /* SceneObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F65D6AC91F4C7A7D0036A224 /* SceneObject.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +54,8 @@
 		18D995011F3A0DC50012551B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		18F720631F4C34BD00EC4B3A /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		18F720641F4C34BD00EC4B3A /* Model.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
+		F65D6AC91F4C7A7D0036A224 /* SceneObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cpp; sourceTree = "<group>"; };
+		F65D6ACA1F4C7A7D0036A224 /* SceneObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneObject.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +108,8 @@
 				18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */,
 				18F720631F4C34BD00EC4B3A /* Model.cpp */,
 				18F720641F4C34BD00EC4B3A /* Model.hpp */,
+				F65D6AC91F4C7A7D0036A224 /* SceneObject.cpp */,
+				F65D6ACA1F4C7A7D0036A224 /* SceneObject.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -183,6 +188,7 @@
 				1816D7731F39CC160050F336 /* main.cpp in Sources */,
 				186C42251F40DF5000B45785 /* stb_image.cpp in Sources */,
 				18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */,
+				F65D6ACB1F4C7A7D0036A224 /* SceneObject.cpp in Sources */,
 				186C421F1F3F77C900B45785 /* Shader.cpp in Sources */,
 				18D995021F3A0DC50012551B /* glad.c in Sources */,
 			);
