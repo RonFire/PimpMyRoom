@@ -16,6 +16,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.hpp"
 
+
 class SceneObject
 {
 public:

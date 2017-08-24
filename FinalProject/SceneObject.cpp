@@ -20,12 +20,14 @@ void SceneObject::addChild(SceneObject *child)
 
 void SceneObject::translate(glm::vec3 vector)
 {
-	model = glm::translate(model, vector);
+	position = vector;
+//	model = glm::translate(model, vector);
 }
 
-void SceneObject::rotate(GLfloat angle, glm::vec3 axis)
+void SceneObject::rotate(GLfloat angleParam, glm::vec3 axis)
 {
-	model = glm::rotate(model, glm::radians(angle), axis);
+	angle = angleParam;
+//	model = glm::rotate(model, glm::radians(angleParam), axis);
 }
 
 void SceneObject::scaleIsotropic(GLfloat value)

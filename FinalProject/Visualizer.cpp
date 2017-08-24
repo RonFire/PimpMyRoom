@@ -333,14 +333,14 @@ int Visualizer::doVisualisation() {
 		}
 		
 		// render the loaded model
-//		modelShader.use();
-//		modelShader.setMat4("projection", projection);
-//		modelShader.setMat4("view", view);
+//		boxShader.use();
+//		boxShader.setMat4("projection", projection);
+//		boxShader.setMat4("view", view);
 //		glm::mat4 modelModel;
 //		modelModel = glm::translate(modelModel, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
 //		modelModel = glm::scale(modelModel, glm::vec3(0.02f, 0.02f, 0.02f));	// it's a bit too big for our scene, so scale it down
-//		modelShader.setMat4("model", modelModel);
-//		ourModel.Draw(modelShader);
+//		boxShader.setMat4("model", modelModel);
+//		ourModel.Draw(boxShader);
 		
 //		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
