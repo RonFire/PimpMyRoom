@@ -315,7 +315,6 @@ int Visualizer::doVisualisation() {
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
 			boxShader.setMat4("model", model);
-			
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 		
@@ -325,6 +324,7 @@ int Visualizer::doVisualisation() {
 		for (unsigned int i=0; i<4; i++) {
 			model = glm::mat4();
 			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::rotate(model, glm::radians(10.0f), glm::vec3(0.0, 1.0, 0.0));
 			model = glm::scale(model, glm::vec3(0.2f));
 			lampShader.setMat4("model", model);
 			
