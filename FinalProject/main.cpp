@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
 	rootObject.setType(1);
 	rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
 	rootObject.setAngle(15.0);
-	rootObject.addChild(&childObject);
+	rootObject.children.push_back(childObject);
 	
 	
 //	==================

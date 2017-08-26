@@ -17,17 +17,14 @@
 class SceneObject
 {
 public:
-	SceneObject* parent = nullptr;
-	std::vector<SceneObject*> children = {};
+	std::vector<SceneObject> children = {};
 	
 	glm::vec3 position = glm::vec3(0.0);
 	GLfloat angle = 0.0;
 	unsigned int type = 0;
 	
 	SceneObject();
-	
-	void addChild(SceneObject* child);
-	
+		
 	void setType(unsigned int typeParam);
 	void setPosition(glm::vec3 positionParam);
 	void setAngle(GLfloat angleParam);

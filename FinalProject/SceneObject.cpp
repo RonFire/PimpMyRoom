@@ -13,11 +13,6 @@ SceneObject::SceneObject() {
 	
 }
 
-void SceneObject::addChild(SceneObject *child)
-{
-	children.push_back(child);
-}
-
 void SceneObject::setType(unsigned int type)
 {
 	this->type = type;
@@ -43,8 +38,8 @@ void SceneObject::draw(Shader &shader, ResourceManager &resourceManager)
 	shader.setMat4("model", model);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	
-	for(std::vector<SceneObject*>::iterator it = this->children.begin(); it != this->children.end(); it++) {
-		(*it)->draw(shader, resourceManager);
+	for(std::vector<SceneObject>::iterator it = this->children.begin(); it != this->children.end(); it++) {
+		it->draw(shader, resourceManager);
 	}
 	
 }
