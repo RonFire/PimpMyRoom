@@ -6,19 +6,8 @@
 //  Copyright © 2017 rapidRonald. All rights reserved.
 //
 
-#include "Camera.hpp"
 #include "Visualizer.hpp"
-#include "Shader.hpp"
-#include "Model.hpp"
-#include "stb_image.hpp"
-#include <iostream>
-#include <math.h>
-#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -93,47 +82,47 @@ int Visualizer::doVisualisation() {
 	
 	float vertices[] = {
 		// positions          // normals           // texture coords
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 0.0f,
+		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
+		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
+		-1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-		0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		-1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   2.0f, 0.0f,
+		1.0f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   2.0f, 1.0f,
+		1.0f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   2.0f, 1.0f,
+		-1.0f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+		-1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 		
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-1.0f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-1.0f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		-1.0f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-1.0f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-1.0f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-1.0f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-		0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		1.0f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		1.0f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		-1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  2.0f, 1.0f,
+		1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  2.0f, 0.0f,
+		1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  2.0f, 0.0f,
+		-1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 		
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-		0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-		0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 1.0f,
+		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
+		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
+		-1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 	
 	// cube positions
@@ -161,34 +150,38 @@ int Visualizer::doVisualisation() {
 	//	Vertex Buffer Object (VBO) initialization
 	//	=========================================
 	
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
-	glBindVertexArray(VAO);
-	
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// normal attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-	// texture coord attribute !!!! NICHT VERGESSEN !!!!
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
+//	unsigned int VBO, VAO;
+//	glGenVertexArrays(1, &VAO);
+//	glGenBuffers(1, &VBO);
+//	
+//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+//	
+//	glBindVertexArray(VAO);
+//	
+//	// position attribute
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+//	glEnableVertexAttribArray(0);
+//	// normal attribute
+//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+//	glEnableVertexAttribArray(1);
+//	// texture coord attribute !!!! NICHT VERGESSEN !!!!
+//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+//	glEnableVertexAttribArray(2);
 	
 	// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
-	unsigned int lightVAO;
+	unsigned int lightVAO, lightVBO;
 	glGenVertexArrays(1, &lightVAO);
+	glGenBuffers(1, &lightVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	glBindVertexArray(lightVAO);
-	// we only need to bind to the VBO, the container's VBO's data already contains the correct data.
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// set the vertex attributes (only position data for our lamp)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	
+	resourceManager.initialize();
 
 	
 	//	=========================================
@@ -300,7 +293,7 @@ int Visualizer::doVisualisation() {
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
 		boxShader.setMat4("projection", projection);
 		
-		glBindVertexArray(VAO);
+		glBindVertexArray(resourceManager.getVAO(1));
 		// model matrix
 		// ------------
 		glm::mat4 model;
@@ -350,9 +343,9 @@ int Visualizer::doVisualisation() {
 		glfwPollEvents();
 	}
 	
-	glDeleteVertexArrays(1, &VAO);
+//	glDeleteVertexArrays(1, &VAO);
 	glDeleteVertexArrays(1, &lightVAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &lightVBO);
 //	glDeleteBuffers(1, &EBO);
 	
 	// glfw: terminate, clearing all previously allocated GLFW resources

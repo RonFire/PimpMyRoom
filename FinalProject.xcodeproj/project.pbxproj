@@ -17,6 +17,7 @@
 		1878A9991F3E280E00B0C0DC /* Visualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1878A9971F3E280E00B0C0DC /* Visualizer.cpp */; };
 		18ADC7ED1F48EA8D00080451 /* libassimp.4.0.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 18ADC7EC1F48EA8D00080451 /* libassimp.4.0.1.dylib */; };
 		18BA1D9C1F49A10100C5DF92 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */; };
+		18BAA6521F50B4C30069F377 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BAA6501F50B4C30069F377 /* ResourceManager.cpp */; };
 		18D995021F3A0DC50012551B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 18D995011F3A0DC50012551B /* glad.c */; };
 		18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F720631F4C34BD00EC4B3A /* Model.cpp */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,8 @@
 		18ADC7EC1F48EA8D00080451 /* libassimp.4.0.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.0.1.dylib; path = ../../../../../../../../usr/local/Cellar/assimp/4.0.1/lib/libassimp.4.0.1.dylib; sourceTree = "<group>"; };
 		18BA1D9A1F49A10100C5DF92 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		18BA1D9B1F49A10100C5DF92 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		18BAA6501F50B4C30069F377 /* ResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
+		18BAA6511F50B4C30069F377 /* ResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ResourceManager.hpp; sourceTree = "<group>"; };
 		18D995011F3A0DC50012551B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		18F720631F4C34BD00EC4B3A /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		18F720641F4C34BD00EC4B3A /* Model.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				18F720641F4C34BD00EC4B3A /* Model.hpp */,
 				183C4AFB1F4CB33900959C6F /* SceneObject.cpp */,
 				183C4AFC1F4CB33900959C6F /* SceneObject.hpp */,
+				18BAA6501F50B4C30069F377 /* ResourceManager.cpp */,
+				18BAA6511F50B4C30069F377 /* ResourceManager.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 				183C4AFD1F4CB33900959C6F /* SceneObject.cpp in Sources */,
 				186C421F1F3F77C900B45785 /* Shader.cpp in Sources */,
 				18D995021F3A0DC50012551B /* glad.c in Sources */,
+				18BAA6521F50B4C30069F377 /* ResourceManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

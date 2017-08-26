@@ -9,12 +9,13 @@
 #ifndef Visualizer_hpp
 #define Visualizer_hpp
 
-#include <stdio.h>
+#include "ResourceManager.hpp"
 
 class Visualizer {
 	
-public:
 	
+public:
+	ResourceManager resourceManager;
 	int doVisualisation();
 };
 
