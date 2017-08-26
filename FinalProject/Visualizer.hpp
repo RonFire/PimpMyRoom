@@ -9,14 +9,14 @@
 #ifndef Visualizer_hpp
 #define Visualizer_hpp
 
-#include "ResourceManager.hpp"
+#include "SceneObject.hpp"
 
 class Visualizer {
 	
 	
 public:
 	ResourceManager resourceManager;
-	int doVisualisation();
+	int doVisualisation(SceneObject* sceneObject);
 };
 
 #endif /* Visualizer_hpp */

@@ -18,19 +18,34 @@ void SceneObject::addChild(SceneObject *child)
 	children.push_back(child);
 }
 
-void SceneObject::translate(glm::vec3 vector)
+void SceneObject::setType(unsigned int type)
 {
-	position = vector;
-//	model = glm::translate(model, vector);
+	this->type = type;
 }
 
-void SceneObject::rotate(GLfloat angleParam, glm::vec3 axis)
+void SceneObject::setPosition(glm::vec3 position)
 {
-	angle = angleParam;
-//	model = glm::rotate(model, glm::radians(angleParam), axis);
+	this->position = position;
 }
 
-void SceneObject::scaleIsotropic(GLfloat value)
+void SceneObject::setAngle(GLfloat angle)
 {
-	model = glm::scale(model, glm::vec3(value));
+	this->angle = angle;
+}
+
+void SceneObject::draw(Shader shader, ResourceManager resourceManager)
+{
+//	shader.use();
+	std::cout << this->type << std::endl;
+	glBindVertexArray(resourceManager.getVAO(this->type));
+	glm::mat4 model;
+	model = glm::translate(model, this->position);
+	model = glm::rotate(model, glm::radians(this->angle), glm::vec3(0.0f, 1.0f, 0.0f));
+	shader.setMat4("model", model);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	
+	for(std::vector<SceneObject*>::iterator it = this->children.begin(); it != this->children.end(); it++) {
+		(*it)->draw(shader, resourceManager);
+	}
+	
 }

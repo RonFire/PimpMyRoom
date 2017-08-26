@@ -10,7 +10,6 @@
 #include <math.h>
 #include <iostream>
 #include "Visualizer.hpp"
-#include "SceneObject.hpp"
 
 // ====================
 // Main Function starts here
@@ -23,10 +22,14 @@ int main(int argc, const char * argv[]) {
 //	==================
 	
 	SceneObject childObject = SceneObject();
-	childObject.translate(glm::vec3(-1.5f,  0.0f, -2.5f));
+	childObject.setType(0);
+	childObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
+	childObject.setAngle(45.0);
 	
 	SceneObject rootObject = SceneObject();
-	rootObject.translate(glm::vec3( 2.0f,  0.0f, -15.0f));
+	rootObject.setType(1);
+	rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
+	rootObject.setAngle(15.0);
 	rootObject.addChild(&childObject);
 	
 	
@@ -35,7 +38,7 @@ int main(int argc, const char * argv[]) {
 //	==================
 
 	Visualizer visualizer = Visualizer();
-	visualizer.doVisualisation();
+	visualizer.doVisualisation(&rootObject);
 	return 0;
 	
 }

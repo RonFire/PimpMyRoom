@@ -11,10 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include "Shader.hpp"
+#include "ResourceManager.hpp"
 
 
 class SceneObject
@@ -25,16 +22,17 @@ public:
 	
 	glm::vec3 position = glm::vec3(0.0);
 	GLfloat angle = 0.0;
-	glm::mat4 model = glm::mat4(1.0);
+	unsigned int type = 0;
 	
 	SceneObject();
 	
-	void draw(Shader shader);
-	
 	void addChild(SceneObject* child);
-	void translate(glm::vec3 vector);
-	void rotate(GLfloat angle, glm::vec3 axis = glm::vec3(0.0, 1.0, 0.0));
-	void scaleIsotropic(GLfloat value);
+	
+	void setType(unsigned int typeParam);
+	void setPosition(glm::vec3 positionParam);
+	void setAngle(GLfloat angleParam);
+	
+	void draw(Shader shader, ResourceManager resourceManager);
 };
 
 #endif /* SceneObject_hpp */
