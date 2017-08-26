@@ -30,13 +30,15 @@ void SceneObject::setAngle(GLfloat angle)
 
 void SceneObject::draw(Shader &shader, ResourceManager &resourceManager)
 {
-	shader.use();
-	glBindVertexArray(resourceManager.getVAO(this->type));
-	glm::mat4 model;
-	model = glm::translate(model, this->position);
-	model = glm::rotate(model, glm::radians(this->angle), glm::vec3(0.0f, 1.0f, 0.0f));
-	shader.setMat4("model", model);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	if(this->type != 99) {
+		shader.use();
+		glBindVertexArray(resourceManager.getVAO(this->type));
+		glm::mat4 model;
+		model = glm::translate(model, this->position);
+		model = glm::rotate(model, glm::radians(this->angle), glm::vec3(0.0f, 1.0f, 0.0f));
+		shader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
 	
 	for(std::vector<SceneObject>::iterator it = this->children.begin(); it != this->children.end(); it++) {
 		it->draw(shader, resourceManager);

@@ -21,16 +21,22 @@ int main(int argc, const char * argv[]) {
 //	Create Test SceneObject
 //	==================
 	
-	SceneObject childObject = SceneObject();
-	childObject.setType(0);
-	childObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
-	childObject.setAngle(45.0);
+	SceneObject firstChairObject = SceneObject();
+	firstChairObject.setType(0);
+	firstChairObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
+	firstChairObject.setAngle(45.0);
+	
+	SceneObject tableObject = SceneObject();
+	tableObject.setType(1);
+	tableObject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	tableObject.setAngle(15.0);
 	
 	SceneObject rootObject = SceneObject();
-	rootObject.setType(1);
+	rootObject.setType(99);
 	rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
-	rootObject.setAngle(15.0);
-	rootObject.children.push_back(childObject);
+	rootObject.children.push_back(tableObject);
+	rootObject.children.push_back(firstChairObject);
+	
 	
 	
 //	==================
