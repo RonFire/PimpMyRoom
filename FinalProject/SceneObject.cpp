@@ -33,10 +33,9 @@ void SceneObject::setAngle(GLfloat angle)
 	this->angle = angle;
 }
 
-void SceneObject::draw(Shader shader, ResourceManager resourceManager)
+void SceneObject::draw(Shader &shader, ResourceManager &resourceManager)
 {
-//	shader.use();
-	std::cout << this->type << std::endl;
+	shader.use();
 	glBindVertexArray(resourceManager.getVAO(this->type));
 	glm::mat4 model;
 	model = glm::translate(model, this->position);

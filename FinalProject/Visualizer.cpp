@@ -312,20 +312,20 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 //		}
 		sceneObject->draw(boxShader, resourceManager);
 		
-		lampShader.use();
-		lampShader.setMat4("projection", projection);
-		lampShader.setMat4("view", view);
-		for (unsigned int i=0; i<4; i++) {
-			glm::mat4 model;
-			model = glm::mat4();
-			model = glm::translate(model, pointLightPositions[i]);
-			model = glm::rotate(model, glm::radians(10.0f), glm::vec3(0.0, 1.0, 0.0));
-			model = glm::scale(model, glm::vec3(0.2f));
-			lampShader.setMat4("model", model);
-			
-			glBindVertexArray(lightVAO);
-			glDrawArrays(GL_TRIANGLES, 0, 36);
-		}
+//		lampShader.use();
+//		lampShader.setMat4("projection", projection);
+//		lampShader.setMat4("view", view);
+//		for (unsigned int i=0; i<4; i++) {
+//			glm::mat4 model;
+//			model = glm::mat4();
+//			model = glm::translate(model, pointLightPositions[i]);
+//			model = glm::rotate(model, glm::radians(10.0f), glm::vec3(0.0, 1.0, 0.0));
+//			model = glm::scale(model, glm::vec3(0.2f));
+//			lampShader.setMat4("model", model);
+//			
+//			glBindVertexArray(lightVAO);
+//			glDrawArrays(GL_TRIANGLES, 0, 36);
+//		}
 		
 		// render the loaded model
 //		boxShader.use();
