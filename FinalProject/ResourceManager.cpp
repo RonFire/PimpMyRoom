@@ -21,6 +21,71 @@ ResourceManager::~ResourceManager()
 }
 void ResourceManager::initialize()
 {
+	// init book VAO to use later in objects
+	float bookVertices[] = {
+		// positions          // normals           // texture coords
+		-0.15f, -0.025f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		0.15f, -0.025f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+		0.15f,  0.025f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		0.15f,  0.025f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+		-0.15f,  0.025f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		-0.15f, -0.025f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		
+		-0.15f, -0.025f,  0.1f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		0.15f, -0.025f,  0.1f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+		0.15f,  0.025f,  0.1f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+		0.15f,  0.025f,  0.1f,  0.0f,  0.0f, 1.0f,   1.0f, 1.0f,
+		-0.15f,  0.025f,  0.1f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+		-0.15f, -0.025f,  0.1f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		
+		-0.15f,  0.025f,  0.1f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-0.15f,  0.025f, -0.1f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		-0.15f, -0.025f, -0.1f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.15f, -0.025f, -0.1f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.15f, -0.025f,  0.1f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-0.15f,  0.025f,  0.1f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		
+		0.15f,  0.025f,  0.1f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		0.15f,  0.025f, -0.1f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		0.15f, -0.025f, -0.1f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		0.15f, -0.025f, -0.1f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		0.15f, -0.025f,  0.1f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		0.15f,  0.025f,  0.1f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		
+		-0.15f, -0.025f, -0.1f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		0.15f, -0.025f, -0.1f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+		0.15f, -0.025f,  0.1f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		0.15f, -0.025f,  0.1f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		-0.15f, -0.025f,  0.1f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-0.15f, -0.025f, -0.1f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		
+		-0.15f,  0.025f, -0.1f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		0.15f,  0.025f, -0.1f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+		0.15f,  0.025f,  0.1f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		0.15f,  0.025f,  0.1f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		-0.15f,  0.025f,  0.1f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-0.15f,  0.025f, -0.1f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+	};
+	
+	
+	glGenVertexArrays(1, &bookVAO);
+	glGenBuffers(1, &bookVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, bookVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(bookVertices), bookVertices, GL_STATIC_DRAW);
+	
+	glBindVertexArray(bookVAO);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	
 	// init chair VAO to use later in objects
 	float chairVertices[] = {
 		// positions          // normals           // texture coords
@@ -218,12 +283,12 @@ void ResourceManager::initialize()
 	// initialize floor VAO
 	float floorVertices[] = {
 		// positions          // normals           // texture coords
-		-4.0f,  -0.5f, -4.0f,  0.0f,  1.0f,  0.0f,  0.0f, 8.0f,
-		4.0f,  -0.5f, -4.0f,  0.0f,  1.0f,  0.0f,  8.0f, 8.0f,
-		4.0f,  -0.5f,  4.0f,  0.0f,  1.0f,  0.0f,  8.0f, 0.0f,
-		4.0f,  -0.5f,  4.0f,  0.0f,  1.0f,  0.0f,  8.0f, 0.0f,
-		-4.0f,  -0.5f,  4.0f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-		-4.0f,  -0.5f, -4.0f,  0.0f,  1.0f,  0.0f,  0.0f, 8.0f
+		-5.0f,  -0.5f, -5.0f,  0.0f,  1.0f,  0.0f,  0.0f, 10.0f,
+		5.0f,  -0.5f, -5.0f,  0.0f,  1.0f,  0.0f,  8.0f, 10.0f,
+		5.0f,  -0.5f,  5.0f,  0.0f,  1.0f,  0.0f,  8.0f, 0.0f,
+		5.0f,  -0.5f,  5.0f,  0.0f,  1.0f,  0.0f,  8.0f, 0.0f,
+		-5.0f,  -0.5f,  5.0f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-5.0f,  -0.5f, -5.0f,  0.0f,  1.0f,  0.0f,  0.0f, 10.0f
 	};
 	
 	glGenVertexArrays(1, &floorVAO);
@@ -247,40 +312,40 @@ void ResourceManager::initialize()
 	// init wall VAO to use later in objects
 	float wallVertices[] = {
 		// positions          // normals           // texture coords
-		-4.0f, -0.5f, -4.0f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
-		4.0f, -0.5f, -4.0f,  0.0f,  0.0f, 1.0f,  8.0f, 0.0f,
-		4.0f,  3.5f, -4.0f,  0.0f,  0.0f, 1.0f,  8.0f, 3.0f,
-		4.0f,  3.5f, -4.0f,  0.0f,  0.0f, 1.0f,  8.0f, 3.0f,
-		-4.0f,  3.5f, -4.0f,  0.0f,  0.0f, 1.0f,  0.0f, 3.0f,
-		-4.0f, -0.5f, -4.0f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
+		5.0f, -0.5f, -5.0f,  0.0f,  0.0f, 1.0f,  10.0f, 0.0f,
+		5.0f,  3.5f, -5.0f,  0.0f,  0.0f, 1.0f,  10.0f, 3.0f,
+		5.0f,  3.5f, -5.0f,  0.0f,  0.0f, 1.0f,  10.0f, 3.0f,
+		-5.0f,  3.5f, -5.0f,  0.0f,  0.0f, 1.0f,  0.0f, 3.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
 		
-		-4.0f, -0.5f,  4.0f,  0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
-		4.0f, -0.5f,  4.0f,  0.0f,  0.0f, -1.0f,   8.0f, 0.0f,
-		4.0f,  3.5f,  4.0f,  0.0f,  0.0f, -1.0f,   8.0f, 3.0f,
-		4.0f,  3.5f,  4.0f,  0.0f,  0.0f, -1.0f,   8.0f, 3.0f,
-		-4.0f,  3.5f,  4.0f,  0.0f,  0.0f, -1.0f,   0.0f, 3.0f,
-		-4.0f, -3.0f,  4.0f,  0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+		-5.0f, -0.5f,  5.0f,  0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+		5.0f, -0.5f,  5.0f,  0.0f,  0.0f, -1.0f,   10.0f, 0.0f,
+		5.0f,  3.5f,  5.0f,  0.0f,  0.0f, -1.0f,   10.0f, 3.0f,
+		5.0f,  3.5f,  5.0f,  0.0f,  0.0f, -1.0f,   10.0f, 3.0f,
+		-5.0f,  3.5f,  5.0f,  0.0f,  0.0f, -1.0f,   0.0f, 3.0f,
+		-5.0f, -0.5f,  5.0f,  0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
 		
-		4.0f,  3.5f,  4.0f, -1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
-		4.0f,  3.5f, -4.0f, -1.0f,  0.0f,  0.0f,  8.0f, 3.0f,
-		4.0f, -0.5f, -4.0f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
-		4.0f, -0.5f, -4.0f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
-		4.0f, -0.5f,  4.0f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		4.0f,  3.5f,  4.0f, -1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
+		5.0f,  3.5f,  5.0f, -1.0f,  0.0f,  0.0f,  10.0f, 3.0f,
+		5.0f,  3.5f, -5.0f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		5.0f, -0.5f, -5.0f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		5.0f, -0.5f, -5.0f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		5.0f, -0.5f,  5.0f, -1.0f,  0.0f,  0.0f,  10.0f, 0.0f,
+		5.0f,  3.5f,  5.0f, -1.0f,  0.0f,  0.0f,  10.0f, 3.0f,
 		
-		-4.0f,  3.5f,  4.0f,  1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
-		-4.0f,  3.5f, -4.0f,  1.0f,  0.0f,  0.0f,  8.0f, 3.0f,
-		-4.0f, -0.5f, -4.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
-		-4.0f, -0.5f, -4.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
-		-4.0f, -0.5f,  4.0f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		-4.0f,  3.5f,  4.0f,  1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
+		-5.0f,  3.5f,  5.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		-5.0f,  3.5f, -5.0f,  1.0f,  0.0f,  0.0f,  10.0f, 3.0f,
+		-5.0f, -0.5f, -5.0f,  1.0f,  0.0f,  0.0f,  10.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  1.0f,  0.0f,  0.0f,  10.0f, 3.0f,
+		-5.0f, -0.5f,  5.0f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-5.0f,  3.5f,  5.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
 		
-		-4.0f, 3.5f, -4.0f,  0.0f, -1.0f,  0.0f,  0.0f, 8.0f,
-		4.0f, 3.5f, -4.0f,  0.0f, -1.0f,  0.0f,  8.0f, 8.0f,
-		4.0f, 3.5f,  4.0f,  0.0f, -1.0f,  0.0f,  8.0f, 0.0f,
-		4.0f, 3.5f,  4.0f,  0.0f, -1.0f,  0.0f,  8.0f, 0.0f,
-		-4.0f, 3.5f,  4.0f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-		-4.0f, 3.5f, -4.0f,  0.0f, -1.0f,  0.0f,  0.0f, 8.0f,
+		-5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 10.0f,
+		5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 10.0f,
+		5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 0.0f,
+		5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 0.0f,
+		-5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 10.0f,
 	};
 	
 	
@@ -320,6 +385,9 @@ unsigned int ResourceManager::getVAO(int type)
 			
 		case 11:
 			return wallVAO;
+			
+		case 20:
+			return bookVAO;
 			
 		
   default:

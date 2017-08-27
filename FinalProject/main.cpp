@@ -31,10 +31,16 @@ int main(int argc, const char * argv[]) {
 	cupboardObject.setPosition(glm::vec3(1.5f, 0.0f, -1.5f));
 	cupboardObject.setAngle(-30.0);
 	
+	SceneObject bookObject = SceneObject();
+	bookObject.setType(20);
+	bookObject.setPosition(glm::vec3(0.0f, 0.725f, 0.0f));
+	bookObject.setAngle(45.0);
+	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
 	tableObject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tableObject.setAngle(15.0);
+	tableObject.children.push_back(bookObject);
 	
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
