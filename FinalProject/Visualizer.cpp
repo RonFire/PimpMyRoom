@@ -20,7 +20,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0, 1.76, 3.0));
+Camera camera(glm::vec3(0.0, 1.26, 3.0));  // imitates height of 1.76m
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -159,11 +159,16 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	Shader boxShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader floorShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader wallShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
+	Shader ceilingShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
+	Shader doorShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader lampShader("shaders/LampVertexShader.glsl", "shaders/LampFragmentShader.glsl");
+	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
 	resourceManager.shader.push_back(&boxShader);
 	resourceManager.shader.push_back(&floorShader);
 	resourceManager.shader.push_back(&wallShader);
-//	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
+	resourceManager.shader.push_back(&ceilingShader);
+	resourceManager.shader.push_back(&doorShader);
+	resourceManager.shader.push_back(&modelShader);
 	
 	// ===============
 	// Texture Code
@@ -171,8 +176,11 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	unsigned int diffuseMap = loadTexture("resource/textures/container.png");
 	unsigned int specularMap = loadTexture("resource/textures/container_specular.png");
 	unsigned int floorDiffuseMap = loadTexture("resource/textures/floor.jpg");
-	unsigned int wallDiffuesMap = loadTexture("resource/textures/wall.jpg");
-	unsigned int wallSpecularMap = loadTexture("resource/textures/black.png");
+	unsigned int wallDiffuseMap = loadTexture("resource/textures/wall.jpg");
+	unsigned int ceilingDiffuseMap = loadTexture("resource/textures/ceiling.jpg");
+	unsigned int doorDiffuseMap = loadTexture("resource/textures/door.png");
+	
+	unsigned int blackSpecularMap = loadTexture("resource/textures/black.png");
 	
 //	Model ourModel("resource/armchair/Armchair.3ds");
 	floorShader.use();
@@ -182,6 +190,14 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	wallShader.use();
 	wallShader.setInt("material.diffuse", 4);
 	wallShader.setInt("material.specular", 5);
+	
+	ceilingShader.use();
+	ceilingShader.setInt("material.diffuse", 7);
+	ceilingShader.setInt("material.specular", 7);
+	
+	doorShader.use();
+	doorShader.setInt("material.diffuse", 6);
+	doorShader.setInt("material.specular", 6);
 	
 	boxShader.use();
 	boxShader.setInt("material.diffuse", 0);
@@ -216,9 +232,13 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, floorDiffuseMap);
 		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, wallDiffuesMap);
+		glBindTexture(GL_TEXTURE_2D, wallDiffuseMap);
 		glActiveTexture(GL_TEXTURE5);
-		glBindTexture(GL_TEXTURE_2D, wallSpecularMap);
+		glBindTexture(GL_TEXTURE_2D, blackSpecularMap);
+		glActiveTexture(GL_TEXTURE6);
+		glBindTexture(GL_TEXTURE_2D, doorDiffuseMap);
+		glActiveTexture(GL_TEXTURE7);
+		glBindTexture(GL_TEXTURE_2D, ceilingDiffuseMap);
 		
 
 		boxShader.use();
@@ -308,6 +328,66 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		// projection matrix
 		// -----------------
 		wallShader.setMat4("projection", projection);
+		
+		ceilingShader.use();
+		ceilingShader.setVec3("viewPosition", camera.Position);
+		ceilingShader.setFloat("material.shininess", 32.0f);
+		
+		// point light 1
+		ceilingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		ceilingShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		ceilingShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		ceilingShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		ceilingShader.setFloat("pointLights[0].constant", 1.0f);
+		ceilingShader.setFloat("pointLights[0].linear", 0.09);
+		ceilingShader.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		ceilingShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		ceilingShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		ceilingShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		ceilingShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		ceilingShader.setFloat("pointLights[1].constant", 1.0f);
+		ceilingShader.setFloat("pointLights[1].linear", 0.09);
+		ceilingShader.setFloat("pointLights[1].quadratic", 0.032);
+		
+		// view matrix with camera
+		// -----------------------
+		ceilingShader.setMat4("view", view);
+		// projection matrix
+		// -----------------
+		ceilingShader.setMat4("projection", projection);
+		
+		doorShader.use();
+		doorShader.setVec3("viewPosition", camera.Position);
+		doorShader.setFloat("material.shininess", 32.0f);
+		
+		// point light 1
+		doorShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		doorShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		doorShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		doorShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		doorShader.setFloat("pointLights[0].constant", 1.0f);
+		doorShader.setFloat("pointLights[0].linear", 0.09);
+		doorShader.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		doorShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		doorShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		doorShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		doorShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		doorShader.setFloat("pointLights[1].constant", 1.0f);
+		doorShader.setFloat("pointLights[1].linear", 0.09);
+		doorShader.setFloat("pointLights[1].quadratic", 0.032);
+		
+		// view matrix with camera
+		// -----------------------
+		doorShader.setMat4("view", view);
+		// projection matrix
+		// -----------------
+		doorShader.setMat4("projection", projection);
+		
+		modelShader.use();
+		modelShader.setMat4("projection", projection);
+		modelShader.setMat4("view", view);
 		
 //		glBindVertexArray(resourceManager.getVAO(1));
 		// model matrix

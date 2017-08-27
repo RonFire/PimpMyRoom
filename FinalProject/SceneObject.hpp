@@ -22,13 +22,14 @@ public:
 	glm::vec3 position = glm::vec3(0.0);
 	GLfloat angle = 0.0;
 	unsigned int type = 0;
+	std::string path = "";
 	
 	SceneObject();
 		
 	void setType(unsigned int typeParam);
 	void setPosition(glm::vec3 positionParam);
 	void setAngle(GLfloat angleParam);
-	
+	void setPath(std::string pathParam);
 	void draw(ResourceManager &resourceManager);
 };
 

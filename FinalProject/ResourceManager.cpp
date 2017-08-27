@@ -339,13 +339,6 @@ void ResourceManager::initialize()
 		-5.0f, -0.5f, -5.0f,  1.0f,  0.0f,  0.0f,  10.0f, 3.0f,
 		-5.0f, -0.5f,  5.0f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
 		-5.0f,  3.5f,  5.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
-		
-		-5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 10.0f,
-		5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 10.0f,
-		5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 0.0f,
-		5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 0.0f,
-		-5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-		-5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 10.0f,
 	};
 	
 	
@@ -356,6 +349,66 @@ void ResourceManager::initialize()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(wallVertices), wallVertices, GL_STATIC_DRAW);
 	
 	glBindVertexArray(wallVAO);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	
+	// init ceiling VAO to use later in objects
+	float ceilingVertices[] = {
+		// positions          // normals           // texture coords
+		-5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 10.0f,
+		5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 10.0f,
+		5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 0.0f,
+		5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  10.0f, 0.0f,
+		-5.0f, 3.5f,  5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-5.0f, 3.5f, -5.0f,  0.0f, -1.0f,  0.0f,  0.0f, 10.0f,
+	};
+	
+	
+	glGenVertexArrays(1, &ceilingVAO);
+	glGenBuffers(1, &ceilingVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, ceilingVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(ceilingVertices), ceilingVertices, GL_STATIC_DRAW);
+	
+	glBindVertexArray(ceilingVAO);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	
+	// init door VAO to use later in objects
+	float doorVertices[] = {
+		// positions          // normals           // texture coords
+		-0.5f, 1.7f, 0.0f,  0.0f, 0.0f,  -1.0f,  0.28f, 1.01f,
+		0.5f, 1.7f, 0.0f,  0.0f, 0.0f,  -1.0f,  0.72f, 1.01f,
+		0.5f, -0.5f,  0.0f,  0.0f, 0.0f,  -1.0f,  0.72f, 0.0f,
+		0.5f, -0.5f,  0.0f,  0.0f, 0.0f,  -1.0f,  0.72f, 0.0f,
+		-0.5f, -0.5f,  0.0f,  0.0f, 0.0f,  -1.0f,  0.28f, 0.0f,
+		-0.5f, 1.7f,  0.0f,  0.0f, 0.0f,  -1.0f,  0.28f, 1.01f,
+	};
+	
+	
+	glGenVertexArrays(1, &doorVAO);
+	glGenBuffers(1, &doorVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, doorVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(doorVertices), doorVertices, GL_STATIC_DRAW);
+	
+	glBindVertexArray(doorVAO);
 	
 	// position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -380,11 +433,17 @@ unsigned int ResourceManager::getVAO(int type)
 		case 2:
 			return cupboardVAO;
 			
+		case 3:
+			return doorVAO;
+			
 		case 10:
 			return floorVAO;
 			
 		case 11:
 			return wallVAO;
+			
+		case 12:
+			return ceilingVAO;
 			
 		case 20:
 			return bookVAO;
@@ -398,11 +457,43 @@ unsigned int ResourceManager::getVAO(int type)
 Shader* ResourceManager::getShader(int type)
 {
 	switch (type) {
+		case 3:
+			return this->shader[4];
 		case 10:
 			return this->shader[1];
 		case 11:
 			return this->shader[2];
+		case 12:
+			return this->shader[3];
+		case 99:
+			return this->shader[5];
 		default:
 			return this->shader[0];
 	}
 }
+
+Model& ResourceManager::getFigure(char *path)
+{
+	std::map<std::string, Model>::iterator it;
+	it = this->figureMap.find(path);
+	if (it != this->figureMap.end()) {
+		return it->second;
+	}
+	Model model(path);
+	this->figureMap.insert(std::pair<std::string, Model>(path, model));
+	return model;
+}
+
+glm::vec3 ResourceManager::getScaling(int type)
+{
+	switch (type) {
+		case 0:
+			return glm::vec3(0.015f);
+		case 2:
+			return glm::vec3(0.2f);
+		default:
+			return glm::vec3(1.0f);
+	}
+}
+
+

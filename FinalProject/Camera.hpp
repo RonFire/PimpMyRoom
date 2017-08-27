@@ -82,7 +82,7 @@ public:
 			Position -= Right * velocity;
 		if (direction == RIGHT)
 			Position += Right * velocity;
-		Position.y = 1.76f; // make camera stay on the floor
+		Position.y = 1.26f; // make camera stay on same height
 	}
 	
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
