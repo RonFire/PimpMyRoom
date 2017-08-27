@@ -10,6 +10,7 @@
 #include <math.h>
 #include <iostream>
 #include "Visualizer.hpp"
+#include "Optimizer.hpp"
 
 // ====================
 // Main Function starts here
@@ -58,7 +59,14 @@ int main(int argc, const char * argv[]) {
 	rootObject.children.push_back(wallObject);
 	rootObject.children.push_back(floorObject);
 	
-	
+    for(int i = 0; i < rootObject.children.size(); i++)
+    {
+        if(rootObject.children[i].type == 10)
+        {
+            Optimizer optimizer(rootObject.children[i], 1000, 1);
+            rootObject.children[i]  = optimizer.optimize();
+        }
+    }
 	
 //	==================
 //	Visualization part

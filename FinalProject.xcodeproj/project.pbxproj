@@ -20,6 +20,7 @@
 		18BAA6521F50B4C30069F377 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18BAA6501F50B4C30069F377 /* ResourceManager.cpp */; };
 		18D995021F3A0DC50012551B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 18D995011F3A0DC50012551B /* glad.c */; };
 		18F720651F4C34BD00EC4B3A /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18F720631F4C34BD00EC4B3A /* Model.cpp */; };
+		F6AD598E1F53138F0015F704 /* Optimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F6AD598C1F53138F0015F704 /* Optimizer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +60,8 @@
 		18D995011F3A0DC50012551B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		18F720631F4C34BD00EC4B3A /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		18F720641F4C34BD00EC4B3A /* Model.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
+		F6AD598C1F53138F0015F704 /* Optimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Optimizer.cpp; sourceTree = "<group>"; };
+		F6AD598D1F53138F0015F704 /* Optimizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Optimizer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 				183C4AFC1F4CB33900959C6F /* SceneObject.hpp */,
 				18BAA6501F50B4C30069F377 /* ResourceManager.cpp */,
 				18BAA6511F50B4C30069F377 /* ResourceManager.hpp */,
+				F6AD598C1F53138F0015F704 /* Optimizer.cpp */,
+				F6AD598D1F53138F0015F704 /* Optimizer.hpp */,
 			);
 			path = FinalProject;
 			sourceTree = "<group>";
@@ -197,6 +202,7 @@
 				186C421F1F3F77C900B45785 /* Shader.cpp in Sources */,
 				18D995021F3A0DC50012551B /* glad.c in Sources */,
 				18BAA6521F50B4C30069F377 /* ResourceManager.cpp in Sources */,
+				F6AD598E1F53138F0015F704 /* Optimizer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
