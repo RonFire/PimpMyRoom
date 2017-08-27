@@ -490,7 +490,7 @@ glm::vec3 ResourceManager::getScaling(int type)
 		case 0:
 			return glm::vec3(0.015f);
 		case 2:
-			return glm::vec3(0.2f);
+			return glm::vec3(0.17f);
 		default:
 			return glm::vec3(1.0f);
 	}

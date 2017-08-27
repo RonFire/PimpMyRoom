@@ -30,7 +30,6 @@ int main(int argc, const char * argv[]) {
 	secondChair.setType(0);
 	secondChair.setPosition(glm::vec3(-1.5f, 0.0f, -1.0f));
 	secondChair.setAngle(90.0);
-	secondChair.setPath("resource/armchair/Armchair.3ds");
 	
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
