@@ -184,24 +184,24 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	
 //	Model ourModel("resource/armchair/Armchair.3ds");
 	floorShader.use();
-	floorShader.setInt("material.diffuse", 3);
-	floorShader.setInt("material.specular", 3);
+	floorShader.setInt("material.diffuse", 12);
+	floorShader.setInt("material.specular", 12);
 	
 	wallShader.use();
-	wallShader.setInt("material.diffuse", 4);
-	wallShader.setInt("material.specular", 5);
+	wallShader.setInt("material.diffuse", 13);
+	wallShader.setInt("material.specular", 14);
 	
 	ceilingShader.use();
-	ceilingShader.setInt("material.diffuse", 7);
-	ceilingShader.setInt("material.specular", 7);
+	ceilingShader.setInt("material.diffuse", 16);
+	ceilingShader.setInt("material.specular", 16);
 	
 	doorShader.use();
-	doorShader.setInt("material.diffuse", 6);
-	doorShader.setInt("material.specular", 6);
+	doorShader.setInt("material.diffuse", 15);
+	doorShader.setInt("material.specular", 15);
 	
 	boxShader.use();
-	boxShader.setInt("material.diffuse", 0);
-	boxShader.setInt("material.specular", 1);
+	boxShader.setInt("material.diffuse", 10);
+	boxShader.setInt("material.specular", 11);
 	
 	//	=======================
 	//	rendering loop starts here
@@ -225,19 +225,19 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		
 		//		glDrawArrays(GL_TRIANGLES, 0, 3);     // This is the VBO case
 		
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE10);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE11);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
-		glActiveTexture(GL_TEXTURE3);
+		glActiveTexture(GL_TEXTURE12);
 		glBindTexture(GL_TEXTURE_2D, floorDiffuseMap);
-		glActiveTexture(GL_TEXTURE4);
+		glActiveTexture(GL_TEXTURE13);
 		glBindTexture(GL_TEXTURE_2D, wallDiffuseMap);
-		glActiveTexture(GL_TEXTURE5);
+		glActiveTexture(GL_TEXTURE14);
 		glBindTexture(GL_TEXTURE_2D, blackSpecularMap);
-		glActiveTexture(GL_TEXTURE6);
+		glActiveTexture(GL_TEXTURE15);
 		glBindTexture(GL_TEXTURE_2D, doorDiffuseMap);
-		glActiveTexture(GL_TEXTURE7);
+		glActiveTexture(GL_TEXTURE16);
 		glBindTexture(GL_TEXTURE_2D, ceilingDiffuseMap);
 		
 
@@ -441,7 +441,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glfwPollEvents();
 	}
 	
-//	glDeleteVertexArrays(1, &VAO);
 	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteBuffers(1, &lightVBO);
 //	glDeleteBuffers(1, &EBO);
