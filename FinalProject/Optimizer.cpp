@@ -19,12 +19,26 @@ Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, doubl
 
 double Optimizer::calculateEnergy(SceneObject* sceneGraph)
 {
-    SceneObject table = sceneGraph->children[0];
-    SceneObject chair = sceneGraph->children[1];
+    //SceneObject table = sceneGraph->children[0];
+    //SceneObject chair = sceneGraph->children[1];
     
-    double distance = sqrt(pow(table.position[0] - chair.position[0], 2.0) + pow(table.position[2] - chair.position[2], 2.0));
+    //double distance = sqrt(pow(table.position[0] - chair.position[0], 2.0) + pow(table.position[2] - chair.position[2], 2.0));
     
-    return pow(4.0 - distance, 2.0);
+    //return pow(4.0 - distance, 2.0);
+    
+    float cost = 0.0;
+    
+    for(int i = 0; i < sceneGraph->children.size(); i++)
+    {
+        for(int j = 0; j < sceneGraph->children.size(); j++)
+        {
+            if(i != j)
+            {
+                cost += fmaxf(0.0, 1.0 - sqrt(pow(sceneGraph->children[i].position[0] - sceneGraph->children[j].position[0], 2.0) + pow(sceneGraph->children[i].position[2] - sceneGraph->children[j].position[2], 2.0)) / (sceneGraph->children[i].diagLength + sceneGraph->children[j].diagLength));
+            }
+        }
+    }
+    return cost;
 };
 
 void Optimizer::modifySceneGraph()
@@ -32,16 +46,19 @@ void Optimizer::modifySceneGraph()
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> room(-4.0, 4.0);
+    std::uniform_int_distribution<> angle(0, 360);
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
         modifiedGraph.children[i].position[0] = room(gen);
         modifiedGraph.children[i].position[2] = room(gen);
+        modifiedGraph.children[i].setAngle(angle(gen));
         if(modifiedGraph.children[i].children.size() != 0)
         {
             for(int j = 0; j < modifiedGraph.children[i].children.size(); j++)
             {
                 modifiedGraph.children[i].children[j].position[0] = modifiedGraph.children[i].position[0];
                 modifiedGraph.children[i].children[j].position[2] = modifiedGraph.children[i].position[2];
+                modifiedGraph.children[i].children[j].setAngle(angle(gen));
             }
         }
     }
@@ -66,7 +83,7 @@ SceneObject Optimizer::optimize()
     calculateEnergy(&sceneGraph);
     
     //std::cout << copy.size() << std::endl;
-    //std::cout << calculateEnergy(&sceneGraph) << std::endl;
+    std::cout << "initial cost:" << calculateEnergy(&sceneGraph) << std::endl;
     
     while(temperature > 1.0)
     {
@@ -88,7 +105,7 @@ SceneObject Optimizer::optimize()
         temperature -= coolingRate;
     }
     
-    //std::cout << calculateEnergy(&currentBestGraph) << std::endl;
+    std::cout << "best cost:" << calculateEnergy(&currentBestGraph) << std::endl;
     
     return currentBestGraph;
 };

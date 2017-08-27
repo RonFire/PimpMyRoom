@@ -20,6 +20,8 @@ public:
 	std::vector<SceneObject> children = {};
 	
 	glm::vec3 position = glm::vec3(0.0);
+    glm::mat4x2 boundingBox;
+    float diagLength = 0.0;
 	GLfloat angle = 0.0;
 	unsigned int type = 0;
 	
