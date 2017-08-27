@@ -136,10 +136,8 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 //	};
 	
 	glm::vec3 pointLightPositions[] = {
-		glm::vec3( 0.7f,  3.0f,  2.0f),
-		glm::vec3( 2.3f,  3.0f, -4.0f),
-		glm::vec3(-4.0f,  3.0f, -12.0f),
-		glm::vec3( 0.0f,  3.0f, -3.0f)
+		glm::vec3( 0.0f,  3.0f,  2.0f),
+		glm::vec3( 0.0f,  3.0f, -2.0f),
 	};
 	
 	//	==================================
@@ -201,7 +199,10 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	//	===============
 	
 	Shader boxShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
+	Shader floorShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader lampShader("shaders/LampVertexShader.glsl", "shaders/LampFragmentShader.glsl");
+	resourceManager.shader.push_back(&boxShader);
+	resourceManager.shader.push_back(&floorShader);
 //	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
 	
 	// ===============
@@ -209,8 +210,13 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	// ===============
 	unsigned int diffuseMap = loadTexture("resource/textures/container.png");
 	unsigned int specularMap = loadTexture("resource/textures/container_specular.png");
+	unsigned int floorDiffuseMap = loadTexture("resource/textures/floor.jpg");
+	unsigned int wallDiffuesMap = loadTexture("resource/textures/wall.jpg");
 	
 //	Model ourModel("resource/armchair/Armchair.3ds");
+	floorShader.use();
+	floorShader.setInt("material.diffuse", 3);
+	floorShader.setInt("material.specular", 3);
 	
 	boxShader.use();
 	boxShader.setInt("material.diffuse", 0);
@@ -242,10 +248,10 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, floorDiffuseMap);
 		
-		// ====================
-		// example Camera configuration
-		// ====================
+
 		boxShader.use();
 		boxShader.setVec3("viewPosition", camera.Position);
 		boxShader.setFloat("material.shininess", 32.0f);
@@ -266,22 +272,7 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		boxShader.setFloat("pointLights[1].constant", 1.0f);
 		boxShader.setFloat("pointLights[1].linear", 0.09);
 		boxShader.setFloat("pointLights[1].quadratic", 0.032);
-		// point light 3
-		boxShader.setVec3("pointLights[2].position", pointLightPositions[2]);
-		boxShader.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-		boxShader.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-		boxShader.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-		boxShader.setFloat("pointLights[2].constant", 1.0f);
-		boxShader.setFloat("pointLights[2].linear", 0.09);
-		boxShader.setFloat("pointLights[2].quadratic", 0.032);
-		// point light 4
-		boxShader.setVec3("pointLights[3].position", pointLightPositions[3]);
-		boxShader.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-		boxShader.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-		boxShader.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-		boxShader.setFloat("pointLights[3].constant", 1.0f);
-		boxShader.setFloat("pointLights[3].linear", 0.09);
-		boxShader.setFloat("pointLights[3].quadratic", 0.032);
+		
 		// view matrix with camera
 		// -----------------------
 		glm::mat4 view;
@@ -292,6 +283,34 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH/(float)SCR_HEIGHT, 0.1f, 100.0f);
 		boxShader.setMat4("projection", projection);
+		
+		floorShader.use();
+		floorShader.setVec3("viewPosition", camera.Position);
+		floorShader.setFloat("material.shininess", 32.0f);
+		
+		// point light 1
+		floorShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		floorShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		floorShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		floorShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		floorShader.setFloat("pointLights[0].constant", 1.0f);
+		floorShader.setFloat("pointLights[0].linear", 0.09);
+		floorShader.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		floorShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		floorShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		floorShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		floorShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		floorShader.setFloat("pointLights[1].constant", 1.0f);
+		floorShader.setFloat("pointLights[1].linear", 0.09);
+		floorShader.setFloat("pointLights[1].quadratic", 0.032);
+		
+		// view matrix with camera
+		// -----------------------
+		floorShader.setMat4("view", view);
+		// projection matrix
+		// -----------------
+		floorShader.setMat4("projection", projection);
 		
 //		glBindVertexArray(resourceManager.getVAO(1));
 		// model matrix
@@ -310,12 +329,12 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 //			boxShader.setMat4("model", model);
 //			glDrawArrays(GL_TRIANGLES, 0, 36);
 //		}
-		sceneObject->draw(boxShader, resourceManager);
+		sceneObject->draw(resourceManager);
 		
 		lampShader.use();
 		lampShader.setMat4("projection", projection);
 		lampShader.setMat4("view", view);
-		for (unsigned int i=0; i<4; i++) {
+		for (unsigned int i=0; i<2; i++) {
 			glm::mat4 model;
 			model = glm::mat4();
 			model = glm::translate(model, pointLightPositions[i]);

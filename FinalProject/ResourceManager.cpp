@@ -21,7 +21,7 @@ ResourceManager::~ResourceManager()
 }
 void ResourceManager::initialize()
 {
-	// init chait VAO to use later in objects
+	// init chair VAO to use later in objects
 	float chairVertices[] = {
 		// positions          // normals           // texture coords
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
@@ -89,47 +89,47 @@ void ResourceManager::initialize()
 	// init tableVAO for later use
 	float tableVertices[] = {
 		// positions          // normals           // texture coords
-		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
-		1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 0.0f,
-		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
-		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
-		-1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
-		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		-1.0f, -0.5f, -1.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		1.0f, -0.5f, -1.5f,  0.0f,  0.0f, -1.0f,  2.0f, 0.0f,
+		1.0f,  0.7f, -1.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
+		1.0f,  0.7f, -1.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
+		-1.0f,  0.7f, -1.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		-1.0f, -0.5f, -1.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		
-		-1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
-		1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   2.0f, 0.0f,
-		1.0f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   2.0f, 1.0f,
-		1.0f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   2.0f, 1.0f,
-		-1.0f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
-		-1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		-1.0f, -0.5f,  1.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		1.0f, -0.5f,  1.5f,  0.0f,  0.0f, 1.0f,   2.0f, 0.0f,
+		1.0f,  0.7f,  1.5f,  0.0f,  0.0f, 1.0f,   2.0f, 1.0f,
+		1.0f,  0.7f,  1.5f,  0.0f,  0.0f, 1.0f,   2.0f, 1.0f,
+		-1.0f,  0.7f,  1.5f,  0.0f,  0.0f, 1.0f,   0.0f, 1.0f,
+		-1.0f, -0.5f,  1.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
 		
-		-1.0f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-		-1.0f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		-1.0f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		-1.0f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		-1.0f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		-1.0f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-1.0f,  0.7f,  1.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-1.0f,  0.7f, -1.5f, -1.0f,  0.0f,  0.0f,  1.0f, 3.0f,
+		-1.0f, -0.5f, -1.5f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		-1.0f, -0.5f, -1.5f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		-1.0f, -0.5f,  1.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-1.0f,  0.7f,  1.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		
-		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-		1.0f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
-		1.0f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
-		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		1.0f,  0.7f,  1.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		1.0f,  0.7f, -1.5f,  1.0f,  0.0f,  0.0f,  1.0f, 3.0f,
+		1.0f, -0.5f, -1.5f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		1.0f, -0.5f, -1.5f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		1.0f, -0.5f,  1.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		1.0f,  0.7f,  1.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		
-		-1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
-		1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  2.0f, 1.0f,
-		1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  2.0f, 0.0f,
-		1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  2.0f, 0.0f,
-		-1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
-		-1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		-1.0f, -0.5f, -1.5f,  0.0f, -1.0f,  0.0f,  0.0f, 3.0f,
+		1.0f, -0.5f, -1.5f,  0.0f, -1.0f,  0.0f,  2.0f, 3.0f,
+		1.0f, -0.5f,  1.5f,  0.0f, -1.0f,  0.0f,  2.0f, 0.0f,
+		1.0f, -0.5f,  1.5f,  0.0f, -1.0f,  0.0f,  2.0f, 0.0f,
+		-1.0f, -0.5f,  1.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-1.0f, -0.5f, -1.5f,  0.0f, -1.0f,  0.0f,  0.0f, 3.0f,
 		
-		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
-		1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 1.0f,
-		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
-		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
-		-1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
-		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+		-1.0f,  0.7f, -1.5f,  0.0f,  1.0f,  0.0f,  0.0f, 3.0f,
+		1.0f,  0.7f, -1.5f,  0.0f,  1.0f,  0.0f,  2.0f, 3.0f,
+		1.0f,  0.7f,  1.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
+		1.0f,  0.7f,  1.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
+		-1.0f,  0.7f,  1.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-1.0f,  0.7f, -1.5f,  0.0f,  1.0f,  0.0f,  0.0f, 3.0f
 	};
 	
 	glGenVertexArrays(1, &tableVAO);
@@ -149,6 +149,100 @@ void ResourceManager::initialize()
 	// texture coord attribute
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
+	
+	// init cupboard VAO to use later in objects
+	float cupboardVertices[] = {
+		// positions          // normals           // texture coords
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+		0.5f,  1.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 2.0f,
+		0.5f,  1.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 2.0f,
+		-0.5f,  1.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 2.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+		
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 0.0f,
+		0.5f,  1.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 2.0f,
+		0.5f,  1.5f,  0.5f,  0.0f,  0.0f, 1.0f,   1.0f, 2.0f,
+		-0.5f,  1.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 2.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
+		
+		-0.5f,  1.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  1.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  1.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		
+		0.5f,  1.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		0.5f,  1.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		0.5f,  1.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+		
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+		
+		-0.5f,  1.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+		0.5f,  1.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+		0.5f,  1.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		0.5f,  1.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+		-0.5f,  1.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-0.5f,  1.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
+	};
+	
+	
+	glGenVertexArrays(1, &cupboardVAO);
+	glGenBuffers(1, &cupboardVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, cupboardVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cupboardVertices), cupboardVertices, GL_STATIC_DRAW);
+	
+	glBindVertexArray(cupboardVAO);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+	
+	// initialize floor VAO
+	float floorVertices[] = {
+		// positions          // normals           // texture coords
+		-4.0f,  -0.5f, -4.0f,  0.0f,  1.0f,  0.0f,  0.0f, 8.0f,
+		4.0f,  -0.5f, -4.0f,  0.0f,  1.0f,  0.0f,  8.0f, 8.0f,
+		4.0f,  -0.5f,  4.0f,  0.0f,  1.0f,  0.0f,  8.0f, 0.0f,
+		4.0f,  -0.5f,  4.0f,  0.0f,  1.0f,  0.0f,  8.0f, 0.0f,
+		-4.0f,  -0.5f,  4.0f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		-4.0f,  -0.5f, -4.0f,  0.0f,  1.0f,  0.0f,  0.0f, 8.0f
+	};
+	
+	glGenVertexArrays(1, &floorVAO);
+	glGenBuffers(1, &floorVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, floorVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertices), floorVertices, GL_STATIC_DRAW);
+	
+	glBindVertexArray(floorVAO);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 }
 
 unsigned int ResourceManager::getVAO(int type)
@@ -156,14 +250,27 @@ unsigned int ResourceManager::getVAO(int type)
 	switch (type) {
   case 0:
 			return chairVAO;
-			break;
 			
   case 1:
 			return tableVAO;
-			break;
+			
+  case 2:
+			return cupboardVAO;
+			
+  case 10:
+			return floorVAO;
 		
   default:
 			return chairVAO;
-			break;
+	}
+}
+
+Shader* ResourceManager::getShader(int type)
+{
+	switch (type) {
+		case 10:
+			return this->shader[1];
+		default:
+			return this->shader[0];
 	}
 }

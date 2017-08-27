@@ -29,7 +29,7 @@ public:
 	void setPosition(glm::vec3 positionParam);
 	void setAngle(GLfloat angleParam);
 	
-	void draw(Shader &shader, ResourceManager &resourceManager);
+	void draw(ResourceManager &resourceManager);
 };
 
 #endif /* SceneObject_hpp */

@@ -29,12 +29,14 @@ class ResourceManager
 {
 public:
 	
-	unsigned int chairVBO, chairVAO;
-	unsigned int tableVBO, tableVAO;
+	unsigned int chairVBO, chairVAO, tableVBO, tableVAO, cupboardVBO, cupboardVAO;
+	unsigned int floorVBO, floorVAO, wallVBO, wallVAO;
+	std::vector<Shader*> shader;
 	ResourceManager();
 	~ResourceManager();
 	
 	void initialize();
 	
 	unsigned int getVAO(int type);
+	Shader* getShader(int type);
 };

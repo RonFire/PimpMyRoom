@@ -26,16 +26,28 @@ int main(int argc, const char * argv[]) {
 	firstChairObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
 	firstChairObject.setAngle(45.0);
 	
+	SceneObject cupboardObject = SceneObject();
+	cupboardObject.setType(2);
+	cupboardObject.setPosition(glm::vec3(1.5f, 0.0f, -1.5f));
+	cupboardObject.setAngle(-30.0);
+	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
 	tableObject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	tableObject.setAngle(15.0);
+	
+	SceneObject floorObject = SceneObject();
+	floorObject.setType(10);
+	floorObject.setPosition(glm::vec3(0.0));
+	
 	
 	SceneObject rootObject = SceneObject();
 	rootObject.setType(99);
 	rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
 	rootObject.children.push_back(tableObject);
 	rootObject.children.push_back(firstChairObject);
+	rootObject.children.push_back(cupboardObject);
+	rootObject.children.push_back(floorObject);
 	
 	
 	

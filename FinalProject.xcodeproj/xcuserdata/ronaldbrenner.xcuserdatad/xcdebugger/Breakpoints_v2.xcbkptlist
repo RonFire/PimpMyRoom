@@ -6,15 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/Visualizer.cpp"
-            timestampString = "525444727.58527"
+            timestampString = "525488340.825477"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
             landmarkName = "Visualizer::doVisualisation(SceneObject *sceneObject)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,12 +26,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/SceneObject.cpp"
-            timestampString = "525474344.693874"
+            timestampString = "525488150.230568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "SceneObject::draw(Shader &amp;shader, ResourceManager &amp;resourceManager)"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "SceneObject::draw(ResourceManager &amp;resourceManager)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FinalProject/Visualizer.cpp"
+            timestampString = "525488340.825477"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
+            landmarkName = "Visualizer::doVisualisation(SceneObject *sceneObject)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
