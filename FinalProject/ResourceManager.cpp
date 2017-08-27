@@ -243,22 +243,84 @@ void ResourceManager::initialize()
 	// texture coord attribute
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
+	
+	// init wall VAO to use later in objects
+	float wallVertices[] = {
+		// positions          // normals           // texture coords
+		-4.0f, -0.5f, -4.0f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
+		4.0f, -0.5f, -4.0f,  0.0f,  0.0f, 1.0f,  8.0f, 0.0f,
+		4.0f,  3.5f, -4.0f,  0.0f,  0.0f, 1.0f,  8.0f, 3.0f,
+		4.0f,  3.5f, -4.0f,  0.0f,  0.0f, 1.0f,  8.0f, 3.0f,
+		-4.0f,  3.5f, -4.0f,  0.0f,  0.0f, 1.0f,  0.0f, 3.0f,
+		-4.0f, -0.5f, -4.0f,  0.0f,  0.0f, 1.0f,  0.0f, 0.0f,
+		
+		-4.0f, -0.5f,  4.0f,  0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+		4.0f, -0.5f,  4.0f,  0.0f,  0.0f, -1.0f,   8.0f, 0.0f,
+		4.0f,  3.5f,  4.0f,  0.0f,  0.0f, -1.0f,   8.0f, 3.0f,
+		4.0f,  3.5f,  4.0f,  0.0f,  0.0f, -1.0f,   8.0f, 3.0f,
+		-4.0f,  3.5f,  4.0f,  0.0f,  0.0f, -1.0f,   0.0f, 3.0f,
+		-4.0f, -3.0f,  4.0f,  0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+		
+		4.0f,  3.5f,  4.0f, -1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
+		4.0f,  3.5f, -4.0f, -1.0f,  0.0f,  0.0f,  8.0f, 3.0f,
+		4.0f, -0.5f, -4.0f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		4.0f, -0.5f, -4.0f, -1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		4.0f, -0.5f,  4.0f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		4.0f,  3.5f,  4.0f, -1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
+		
+		-4.0f,  3.5f,  4.0f,  1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
+		-4.0f,  3.5f, -4.0f,  1.0f,  0.0f,  0.0f,  8.0f, 3.0f,
+		-4.0f, -0.5f, -4.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		-4.0f, -0.5f, -4.0f,  1.0f,  0.0f,  0.0f,  0.0f, 3.0f,
+		-4.0f, -0.5f,  4.0f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		-4.0f,  3.5f,  4.0f,  1.0f,  0.0f,  0.0f,  8.0f, 0.0f,
+		
+		-4.0f, 3.5f, -4.0f,  0.0f, -1.0f,  0.0f,  0.0f, 8.0f,
+		4.0f, 3.5f, -4.0f,  0.0f, -1.0f,  0.0f,  8.0f, 8.0f,
+		4.0f, 3.5f,  4.0f,  0.0f, -1.0f,  0.0f,  8.0f, 0.0f,
+		4.0f, 3.5f,  4.0f,  0.0f, -1.0f,  0.0f,  8.0f, 0.0f,
+		-4.0f, 3.5f,  4.0f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+		-4.0f, 3.5f, -4.0f,  0.0f, -1.0f,  0.0f,  0.0f, 8.0f,
+	};
+	
+	
+	glGenVertexArrays(1, &wallVAO);
+	glGenBuffers(1, &wallVBO);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, wallVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(wallVertices), wallVertices, GL_STATIC_DRAW);
+	
+	glBindVertexArray(wallVAO);
+	
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 }
 
 unsigned int ResourceManager::getVAO(int type)
 {
 	switch (type) {
-  case 0:
+		case 0:
 			return chairVAO;
 			
-  case 1:
+		case 1:
 			return tableVAO;
 			
-  case 2:
+		case 2:
 			return cupboardVAO;
 			
-  case 10:
+		case 10:
 			return floorVAO;
+			
+		case 11:
+			return wallVAO;
+			
 		
   default:
 			return chairVAO;
@@ -270,6 +332,8 @@ Shader* ResourceManager::getShader(int type)
 	switch (type) {
 		case 10:
 			return this->shader[1];
+		case 11:
+			return this->shader[2];
 		default:
 			return this->shader[0];
 	}

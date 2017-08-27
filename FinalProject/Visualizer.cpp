@@ -125,16 +125,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 	
-	// cube positions
-	// --------------
-//	glm::vec3 cubePositions[] = {
-//		glm::vec3( 0.0f,  0.0f,  0.0f),
-//		glm::vec3( 2.0f,  0.0f, -15.0f),
-//		glm::vec3(-1.5f,  0.0f, -2.5f),
-//		glm::vec3(-3.8f,  0.0f, -12.3f),
-//		glm::vec3( 2.4f,  0.0f, -3.5f)
-//	};
-	
 	glm::vec3 pointLightPositions[] = {
 		glm::vec3( 0.0f,  3.0f,  2.0f),
 		glm::vec3( 0.0f,  3.0f, -2.0f),
@@ -147,25 +137,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	//	=========================================
 	//	Vertex Buffer Object (VBO) initialization
 	//	=========================================
-	
-//	unsigned int VBO, VAO;
-//	glGenVertexArrays(1, &VAO);
-//	glGenBuffers(1, &VBO);
-//	
-//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-//	
-//	glBindVertexArray(VAO);
-//	
-//	// position attribute
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-//	glEnableVertexAttribArray(0);
-//	// normal attribute
-//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-//	glEnableVertexAttribArray(1);
-//	// texture coord attribute !!!! NICHT VERGESSEN !!!!
-//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-//	glEnableVertexAttribArray(2);
 	
 	// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
 	unsigned int lightVAO, lightVBO;
@@ -180,19 +151,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	glEnableVertexAttribArray(0);
 	
 	resourceManager.initialize();
-
-	
-	//	=========================================
-	//	Element Buffer Object (EBO) initialization
-	//	=========================================
-	
-//	unsigned int EBO;
-//	glGenBuffers(1, &EBO);
-//	
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	
-	
 	
 	//	===============
 	//	shader handling
@@ -200,9 +158,11 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	
 	Shader boxShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader floorShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
+	Shader wallShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader lampShader("shaders/LampVertexShader.glsl", "shaders/LampFragmentShader.glsl");
 	resourceManager.shader.push_back(&boxShader);
 	resourceManager.shader.push_back(&floorShader);
+	resourceManager.shader.push_back(&wallShader);
 //	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
 	
 	// ===============
@@ -212,11 +172,16 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	unsigned int specularMap = loadTexture("resource/textures/container_specular.png");
 	unsigned int floorDiffuseMap = loadTexture("resource/textures/floor.jpg");
 	unsigned int wallDiffuesMap = loadTexture("resource/textures/wall.jpg");
+	unsigned int wallSpecularMap = loadTexture("resource/textures/black.png");
 	
 //	Model ourModel("resource/armchair/Armchair.3ds");
 	floorShader.use();
 	floorShader.setInt("material.diffuse", 3);
 	floorShader.setInt("material.specular", 3);
+	
+	wallShader.use();
+	wallShader.setInt("material.diffuse", 4);
+	wallShader.setInt("material.specular", 5);
 	
 	boxShader.use();
 	boxShader.setInt("material.diffuse", 0);
@@ -250,6 +215,10 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glBindTexture(GL_TEXTURE_2D, specularMap);
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, floorDiffuseMap);
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, wallDiffuesMap);
+		glActiveTexture(GL_TEXTURE5);
+		glBindTexture(GL_TEXTURE_2D, wallSpecularMap);
 		
 
 		boxShader.use();
@@ -311,6 +280,34 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		// projection matrix
 		// -----------------
 		floorShader.setMat4("projection", projection);
+		
+		wallShader.use();
+		wallShader.setVec3("viewPosition", camera.Position);
+		wallShader.setFloat("material.shininess", 32.0f);
+		
+		// point light 1
+		wallShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		wallShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		wallShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		wallShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		wallShader.setFloat("pointLights[0].constant", 1.0f);
+		wallShader.setFloat("pointLights[0].linear", 0.09);
+		wallShader.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		wallShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		wallShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		wallShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		wallShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		wallShader.setFloat("pointLights[1].constant", 1.0f);
+		wallShader.setFloat("pointLights[1].linear", 0.09);
+		wallShader.setFloat("pointLights[1].quadratic", 0.032);
+		
+		// view matrix with camera
+		// -----------------------
+		wallShader.setMat4("view", view);
+		// projection matrix
+		// -----------------
+		wallShader.setMat4("projection", projection);
 		
 //		glBindVertexArray(resourceManager.getVAO(1));
 		// model matrix
