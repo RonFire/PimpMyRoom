@@ -77,7 +77,7 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	//	===============
-	//	vertex data
+	//	vertex data for pointlights
 	//	===============
 	
 	float vertices[] = {
@@ -182,7 +182,9 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	
 	unsigned int blackSpecularMap = loadTexture("resource/textures/black.png");
 	
-//	Model ourModel("resource/armchair/Armchair.3ds");
+	// ===========================================
+	// Set Texture Positions for different shaders
+	// ===========================================
 	floorShader.use();
 	floorShader.setInt("material.diffuse", 12);
 	floorShader.setInt("material.specular", 12);
@@ -223,8 +225,9 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		//		glDrawArrays(GL_TRIANGLES, 0, 3);     // This is the VBO case
 		
+		// bind textures to GPU
+		// ====================
 		glActiveTexture(GL_TEXTURE10);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
 		glActiveTexture(GL_TEXTURE11);
@@ -241,6 +244,9 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glBindTexture(GL_TEXTURE_2D, ceilingDiffuseMap);
 		
 
+		// =======================
+		// lightsource input for shaders
+		// =======================
 		boxShader.use();
 		boxShader.setVec3("viewPosition", camera.Position);
 		boxShader.setFloat("material.shininess", 32.0f);
