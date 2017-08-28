@@ -18,6 +18,19 @@ ResourceManager::~ResourceManager()
 	glDeleteVertexArrays(1, &tableVAO);
 	glDeleteBuffers(1, &chairVBO);
 	glDeleteBuffers(1, &tableVBO);
+	glDeleteVertexArrays(1, &cupboardVAO);
+	glDeleteBuffers(1, &cupboardVBO);
+	glDeleteVertexArrays(1, &floorVAO);
+	glDeleteBuffers(1, &floorVBO);
+	glDeleteVertexArrays(1, &wallVAO);
+	glDeleteBuffers(1, &wallVBO);
+	glDeleteVertexArrays(1, &ceilingVAO);
+	glDeleteBuffers(1, &ceilingVBO);
+	glDeleteVertexArrays(1, &doorVAO);
+	glDeleteBuffers(1, &doorVBO);
+	glDeleteVertexArrays(1, &bookVAO);
+	glDeleteBuffers(1, &bookVBO);
+	
 }
 void ResourceManager::initialize()
 {

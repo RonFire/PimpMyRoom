@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/Visualizer.cpp"
-            timestampString = "525558070.414483"
+            timestampString = "525571766.953931"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "392"
+            endingLineNumber = "392"
             landmarkName = "Visualizer::doVisualisation(SceneObject *sceneObject)"
             landmarkType = "7">
          </BreakpointContent>
@@ -80,6 +80,22 @@
             startingLineNumber = "58"
             endingLineNumber = "58"
             landmarkName = "SceneObject::draw(ResourceManager &amp;resourceManager)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FinalProject/Camera.hpp"
+            timestampString = "525571244.408488"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "ProcessKeyboard(Camera_Movement direction, float deltaTime)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -389,23 +389,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		modelShader.setMat4("projection", projection);
 		modelShader.setMat4("view", view);
 		
-//		glBindVertexArray(resourceManager.getVAO(1));
-		// model matrix
-		// ------------
-//		glm::mat4 model;
-		// passing transformation to shader
-//		boxShader.setMat4("model", model);
-//		glDrawArrays(GL_TRIANGLES, 0, 36);
-		
-		
-//		for (unsigned int i=0; i<(sizeof(cubePositions)/sizeof(*cubePositions)); i++) {
-//			glm::mat4 model;
-//			model = glm::translate(model, cubePositions[i]);
-//			float angle = 20.0f * i;
-//			model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-//			boxShader.setMat4("model", model);
-//			glDrawArrays(GL_TRIANGLES, 0, 36);
-//		}
 		sceneObject->draw(resourceManager);
 		
 		lampShader.use();
@@ -423,18 +406,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 		
-		// render the loaded model
-//		boxShader.use();
-//		boxShader.setMat4("projection", projection);
-//		boxShader.setMat4("view", view);
-//		glm::mat4 modelModel;
-//		modelModel = glm::translate(modelModel, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-//		modelModel = glm::scale(modelModel, glm::vec3(0.02f, 0.02f, 0.02f));	// it's a bit too big for our scene, so scale it down
-//		boxShader.setMat4("model", modelModel);
-//		ourModel.Draw(boxShader);
-		
-//		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		
 		// check and call events and swap buffers
 		// ======================================
 		glfwSwapBuffers(window);
@@ -443,7 +414,6 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	
 	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteBuffers(1, &lightVBO);
-//	glDeleteBuffers(1, &EBO);
 	
 	// glfw: terminate, clearing all previously allocated GLFW resources
 	// ====================================================================

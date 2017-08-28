@@ -82,6 +82,15 @@ public:
 			Position -= Right * velocity;
 		if (direction == RIGHT)
 			Position += Right * velocity;
+		if (Position.x >= 4.85)
+			Position.x = 4.85;
+		if (Position.x <= -4.85)
+			Position.x = -4.85;
+		if (Position.z >= 4.85)
+			Position.z = 4.85;
+		if (Position.z <= -4.85)
+			Position.z = -4.85;
+			
 		Position.y = 1.26f; // make camera stay on same height
 	}
 	
