@@ -17,7 +17,7 @@
 // ====================
 
 int main(int argc, const char * argv[]) {
-	
+    
 //  ==================
 //	Create Test SceneObject
 //	==================
@@ -42,7 +42,7 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
-    //tableObject.setPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+    tableObject.setPosition(glm::vec3(1.0f, 0.0f, 1.5f));
     tableObject.diagLength = sqrtf(3.25);
 	tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
@@ -88,6 +88,38 @@ int main(int argc, const char * argv[]) {
     glm::vec2 testVec2 = rootObject.boundingBox[3];
     
     std::cout << (testFloat % 360) << std::endl;
+    
+    glm::vec2 center(1.0, 1.5);
+    
+    glm::vec2 p1(center[0] - (tableObject.length / 2.0),
+                 center[1] + (tableObject.width / 2.0));
+    glm::vec2 p2(center[0] - (tableObject.length / 2.0),
+                 center[1] - (tableObject.width / 2.0));
+    glm::vec2 p3(center[0] + (tableObject.length / 2.0),
+                 center[1] + (tableObject.width / 2.0));
+    glm::vec2 p4(center[0] + (tableObject.length / 2.0),
+                 center[1] - (tableObject.width / 2.0));
+    
+    
+    float p1x = cos(45 * M_PI/180) * (p1[0] - center[0]) +  sin(45 * M_PI/180) * (p1[1] - center[1]) + center[0];
+    float p1y = -sin(45 * M_PI/180) * (p1[0] - center[0]) + cos(45 * M_PI/180) * (p1[1] - center[1]) + center[1];
+    p1[0] = p1x;
+    p1[1] = p1y;
+    
+    float p2x = cos(45 * M_PI/180) * (p2[0] - center[0]) + sin(45 * M_PI/180) * (p2[1] - center[1]) + center[0];
+    float p2y = -sin(45 * M_PI/180) * (p2[0] - center[0]) + cos(45 * M_PI/180) * (p2[1] - center[1]) + center[1];
+    p2[0] = p2x;
+    p2[1] = p2y;
+    
+    float p3x = cos(45 * M_PI/180) * (p3[0] - center[0]) +  sin(45 * M_PI/180) * (p3[1] - center[1]) + center[0];
+    float p3y = -sin(45 * M_PI/180) * (p3[0] - center[0]) + cos(45 * M_PI/180) * (p3[1] - center[1]) + center[1];
+    p3[0] = p3x;
+    p3[1] = p3y;
+    
+    float p4x = cos(45 * M_PI/180) * (p4[0] - center[0]) +  sin(45 * M_PI/180) * (p4[1] - center[1]) + center[0];
+    float p4y = -sin(45 * M_PI/180) * (p4[0] - center[0]) + cos(45 * M_PI/180) * (p4[1] - center[1]) + center[1];
+    p4[0] = p4x;
+    p4[1] = p4y;
     
     
     for(int i = 0; i < rootObject.children.size(); i++)

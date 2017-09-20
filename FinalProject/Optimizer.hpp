@@ -21,6 +21,7 @@ class Optimizer
     
     double temperature;
     double coolingRate;
+    double factor;
     
     double calculateEnergy(SceneObject* sceneGraph);
     void modifySceneGraph();

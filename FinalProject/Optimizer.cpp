@@ -18,6 +18,13 @@ inline float cosDeg(float angle)
     return  cos(angle * M_PI/180.0);
 }
 
+inline glm::vec2 getRotatedPoint(float angle, float px, float py, float cx, float cy)
+{
+    glm::vec2 point(cosDeg(angle) * (px - cx) + sinDeg(angle) * (py - cy) + cx,
+                    -sinDeg(angle) * (px - cx) + cosDeg(angle) * (py - cy) + cy);
+    return point;
+}
+
 Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, double coolingRateInput)
 {
     sceneGraph = sceneGraphInput;
@@ -25,6 +32,7 @@ Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, doubl
     currentBestGraph = sceneGraphInput;
     temperature = temperatureInput;
     coolingRate = coolingRateInput;
+    factor = (temperature/10.0);
 };
 
 double Optimizer::calculateEnergy(SceneObject* sceneGraph)
@@ -55,17 +63,22 @@ void Optimizer::modifySceneGraph()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> room(-15.0, 15.0);
+    std::default_random_engine generator;
+    std::normal_distribution<float> distribution(0.0, 0.5 * (temperature/factor));
+    
     std::uniform_int_distribution<> angle(-360, 360);
     
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
         while(true)
         {
-            glm::vec2 newCenter(room(gen), room(gen));
+            glm::vec2 newCenter(modifiedGraph.children[i].position[0], modifiedGraph.children[i].position[2]);
             float objectLength = modifiedGraph.children[i].length;
             float objectWidth = modifiedGraph.children[i].width;
             int oldAngle = modifiedGraph.children[i].angle;
+            
+            glm::vec2 addVec(distribution(generator), distribution(generator));
+            newCenter += addVec;
             
             oldAngle += angle(gen);
             if(oldAngle < 0.0)
@@ -73,45 +86,37 @@ void Optimizer::modifySceneGraph()
             else
                 oldAngle = (oldAngle % 360);
             
-            glm::vec2 p1(newCenter[0] - objectLength / 2.0,
-                         newCenter[1] - objectWidth / 2.0);
+            glm::vec2 p1(newCenter[0] - (objectLength / 2.0),
+                         newCenter[1] - (objectWidth / 2.0));
             
-            glm::vec2 p2(newCenter[0] + objectLength / 2.0,
-                         newCenter[1] - objectWidth / 2.0);
+            glm::vec2 p2(newCenter[0] + (objectLength / 2.0),
+                         newCenter[1] - (objectWidth / 2.0));
             
-            glm::vec2 p3(newCenter[0] + objectLength / 2.0,
-                         newCenter[1] + objectWidth / 2.0);
+            glm::vec2 p3(newCenter[0] + (objectLength / 2.0),
+                         newCenter[1] + (objectWidth / 2.0));
             
-            glm::vec2 p4(newCenter[0] - objectLength / 2.0,
-                         newCenter[1] + objectWidth / 2.0);
+            glm::vec2 p4(newCenter[0] - (objectLength / 2.0),
+                         newCenter[1] + (objectWidth / 2.0));
             
-            p1[0] = cosDeg(oldAngle) * (p1[0] - newCenter[0]) +  sinDeg(oldAngle) * (p1[1] - newCenter[1]) + newCenter[0];
-            p1[1] = -sinDeg(oldAngle) * (p1[0] - newCenter[0]) + cosDeg(oldAngle) * (p1[1] - newCenter[1]) + newCenter[1];
-            
+            p1 = getRotatedPoint(oldAngle, p1[0], p1[1], newCenter[0], newCenter[1]);
             if(p1[0] < -5.0 || p1[0] > 5.0)
                 continue;
             if(p1[1] < -5.0 || p1[1] > 5.0)
                 continue;
             
-            p2[0] = cosDeg(oldAngle) * (p2[0] - newCenter[0]) + sinDeg(oldAngle) * (p2[1] - newCenter[1]) + newCenter[0];
-            p2[1] = -sinDeg(oldAngle) * (p2[0] - newCenter[0]) + cosDeg(oldAngle) * (p2[1] - newCenter[1]) + newCenter[1];
-            
+            p2 = getRotatedPoint(oldAngle, p2[0], p2[1], newCenter[0], newCenter[1]);
             if(p2[0] < -5.0 || p2[0] > 5.0)
                 continue;
             if(p2[1] < -5.0 || p2[1] > 5.0)
                 continue;
             
-            p3[0] = cosDeg(oldAngle) * (p3[0] - newCenter[0]) + sinDeg(oldAngle) * (p3[1] - newCenter[1]) + newCenter[0];
-            p3[1] = -sinDeg(oldAngle) * (p3[0] - newCenter[0]) + cosDeg(oldAngle) * (p3[1] - newCenter[1]) + newCenter[1];
-            
+            p3 = getRotatedPoint(oldAngle, p3[0], p3[1], newCenter[0], newCenter[1]);
             if(p3[0] < -5.0 || p3[0] > 5.0)
                 continue;
             if(p3[1] < -5.0 || p3[1] > 5.0)
                 continue;
             
-            p4[0] = cosDeg(oldAngle) * (p4[0] - newCenter[0]) + sinDeg(oldAngle) * (p4[1] - newCenter[1]) + newCenter[0];
-            p4[1] = -sinDeg(oldAngle) * (p4[0] - newCenter[0]) + cosDeg(oldAngle) * (p4[1] - newCenter[1]) + newCenter[1];
-            
+            p4 = getRotatedPoint(oldAngle, p4[0], p4[1], newCenter[0], newCenter[1]);
             if(p4[0] < -5.0 || p4[0] > 5.0)
                 continue;
             if(p4[1] < -5.0 || p4[1] > 5.0)
@@ -157,21 +162,25 @@ SceneObject Optimizer::optimize()
     
     while(temperature > 1.0)
     {
-        modifySceneGraph();
-        double currentEnergy = calculateEnergy(&sceneGraph);
-        double newEnergy = calculateEnergy(&modifiedGraph);
-        double prob = calculateAcceptanceProbability(currentEnergy, newEnergy, temperature);
-        //std::cout << calculateEnergy(&currentBestGraph) << std::endl;
-        if (prob > accept(gen)) {
-            sceneGraph = modifiedGraph;
-        }
-        modifiedGraph = sceneGraph;
-        
-        if(calculateEnergy(&sceneGraph) < calculateEnergy(&currentBestGraph))
+        for(int i = 0; i < 100; i++)
         {
-            currentBestGraph = sceneGraph;
+            modifySceneGraph();
+            double currentEnergy = calculateEnergy(&sceneGraph);
+            double newEnergy = calculateEnergy(&modifiedGraph);
+            double prob = calculateAcceptanceProbability(currentEnergy, newEnergy, temperature);
+            //std::cout << calculateEnergy(&currentBestGraph) << std::endl;
+            if (prob > accept(gen))
+            {
+                sceneGraph = modifiedGraph;
+                if(calculateEnergy(&sceneGraph) < calculateEnergy(&currentBestGraph))
+                {
+                    currentBestGraph = sceneGraph;
+                }
+                break;
+            }
+            modifiedGraph = sceneGraph;
         }
-        
+        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
         temperature -= coolingRate;
     }
     
