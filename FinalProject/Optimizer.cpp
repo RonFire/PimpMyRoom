@@ -8,6 +8,16 @@
 
 #include "Optimizer.hpp"
 
+inline float sinDeg(float angle)
+{
+    return  sin(angle * M_PI/180.0);
+}
+
+inline float cosDeg(float angle)
+{
+    return  cos(angle * M_PI/180.0);
+}
+
 Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, double coolingRateInput)
 {
     sceneGraph = sceneGraphInput;
@@ -45,77 +55,71 @@ void Optimizer::modifySceneGraph()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> room(-4.5, 4.5);
+    std::uniform_real_distribution<> room(-15.0, 15.0);
     std::uniform_int_distribution<> angle(-360, 360);
+    
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
         while(true)
         {
-            
             glm::vec2 newCenter(room(gen), room(gen));
-            modifiedGraph.children[i].position[0] = newCenter[0];
-            modifiedGraph.children[i].position[2] = newCenter[1];
             float objectLength = modifiedGraph.children[i].length;
             float objectWidth = modifiedGraph.children[i].width;
             int oldAngle = modifiedGraph.children[i].angle;
+            
             oldAngle += angle(gen);
             if(oldAngle < 0.0)
-                oldAngle += 360.0;
+                oldAngle += 360;
             else
                 oldAngle = (oldAngle % 360);
-            modifiedGraph.children[i].setAngle(oldAngle);
-            glm::vec2 p1(modifiedGraph.children[i].position[0] - modifiedGraph.children[i].length / 2.0,
-                         modifiedGraph.children[i].position[2] - modifiedGraph.children[i].width / 2.0);
             
-            glm::vec2 p2(modifiedGraph.children[i].position[0] - modifiedGraph.children[i].length / 2.0,
-                         modifiedGraph.children[i].position[2] + modifiedGraph.children[i].width / 2.0);
+            glm::vec2 p1(newCenter[0] - objectLength / 2.0,
+                         newCenter[1] - objectWidth / 2.0);
             
-            glm::vec2 p3(modifiedGraph.children[i].position[0] + modifiedGraph.children[i].length / 2.0,
-                         modifiedGraph.children[i].position[2] + modifiedGraph.children[i].width / 2.0);
+            glm::vec2 p2(newCenter[0] + objectLength / 2.0,
+                         newCenter[1] - objectWidth / 2.0);
             
-            glm::vec2 p4(modifiedGraph.children[i].position[0] + modifiedGraph.children[i].length / 2.0,
-                         modifiedGraph.children[i].position[2] - modifiedGraph.children[i].width / 2.0);
+            glm::vec2 p3(newCenter[0] + objectLength / 2.0,
+                         newCenter[1] + objectWidth / 2.0);
             
-            p1[0] = cos(oldAngle * M_PI/180.0) * (p1[0] - modifiedGraph.children[i].position[0]) +
-            sin(oldAngle * M_PI/180.0) * (p1[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[0];
-            p1[1] = -sin(oldAngle * M_PI/180.0) * (p1[0] - modifiedGraph.children[i].position[0]) +
-            cos(oldAngle * M_PI/180.0) * (p1[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[2];
+            glm::vec2 p4(newCenter[0] - objectLength / 2.0,
+                         newCenter[1] + objectWidth / 2.0);
+            
+            p1[0] = cosDeg(oldAngle) * (p1[0] - newCenter[0]) +  sinDeg(oldAngle) * (p1[1] - newCenter[1]) + newCenter[0];
+            p1[1] = -sinDeg(oldAngle) * (p1[0] - newCenter[0]) + cosDeg(oldAngle) * (p1[1] - newCenter[1]) + newCenter[1];
             
             if(p1[0] < -5.0 || p1[0] > 5.0)
                 continue;
             if(p1[1] < -5.0 || p1[1] > 5.0)
                 continue;
             
-            p2[0] = cos(oldAngle * M_PI/180.0) * (p2[0] - modifiedGraph.children[i].position[0]) +
-            sin(oldAngle * M_PI/180.0) * (p2[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[0];
-            p2[1] = -sin(oldAngle * M_PI/180.0) * (p2[0] - modifiedGraph.children[i].position[0]) +
-            cos(oldAngle * M_PI/180.0) * (p2[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[2];
+            p2[0] = cosDeg(oldAngle) * (p2[0] - newCenter[0]) + sinDeg(oldAngle) * (p2[1] - newCenter[1]) + newCenter[0];
+            p2[1] = -sinDeg(oldAngle) * (p2[0] - newCenter[0]) + cosDeg(oldAngle) * (p2[1] - newCenter[1]) + newCenter[1];
             
             if(p2[0] < -5.0 || p2[0] > 5.0)
                 continue;
             if(p2[1] < -5.0 || p2[1] > 5.0)
                 continue;
             
-            p3[0] = cos(oldAngle * M_PI/180.0) * (p3[0] - modifiedGraph.children[i].position[0]) +
-            sin(oldAngle * M_PI/180.0) * (p3[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[0];
-            p3[1] = -sin(oldAngle * M_PI/180.0) * (p3[0] - modifiedGraph.children[i].position[0]) +
-            cos(oldAngle * M_PI/180.0) * (p3[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[2];
+            p3[0] = cosDeg(oldAngle) * (p3[0] - newCenter[0]) + sinDeg(oldAngle) * (p3[1] - newCenter[1]) + newCenter[0];
+            p3[1] = -sinDeg(oldAngle) * (p3[0] - newCenter[0]) + cosDeg(oldAngle) * (p3[1] - newCenter[1]) + newCenter[1];
             
             if(p3[0] < -5.0 || p3[0] > 5.0)
                 continue;
             if(p3[1] < -5.0 || p3[1] > 5.0)
                 continue;
             
-            p4[0] = cos(oldAngle * M_PI/180.0) * (p4[0] - modifiedGraph.children[i].position[0]) +
-            sin(oldAngle * M_PI/180.0) * (p4[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[0];
-            p4[1] = -sin(oldAngle * M_PI/180.0) * (p4[0] - modifiedGraph.children[i].position[0]) +
-            cos(oldAngle * M_PI/180.0) * (p4[1] - modifiedGraph.children[i].position[2]) + modifiedGraph.children[i].position[2];
+            p4[0] = cosDeg(oldAngle) * (p4[0] - newCenter[0]) + sinDeg(oldAngle) * (p4[1] - newCenter[1]) + newCenter[0];
+            p4[1] = -sinDeg(oldAngle) * (p4[0] - newCenter[0]) + cosDeg(oldAngle) * (p4[1] - newCenter[1]) + newCenter[1];
             
-            if(p4[0] < -5 || p4[0] > 5)
+            if(p4[0] < -5.0 || p4[0] > 5.0)
                 continue;
-            if(p4[1] < -5 || p4[1] > 5)
+            if(p4[1] < -5.0 || p4[1] > 5.0)
                 continue;
             
+            modifiedGraph.children[i].position[0] = newCenter[0];
+            modifiedGraph.children[i].position[2] = newCenter[1];
+            modifiedGraph.children[i].setAngle(oldAngle);
             break;
         }
         if(modifiedGraph.children[i].children.size() != 0)

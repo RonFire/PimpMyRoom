@@ -42,6 +42,7 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
+    //tableObject.setPosition(glm::vec3(1.0f, 0.0f, 0.0f));
     tableObject.diagLength = sqrtf(3.25);
 	tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
@@ -89,8 +90,6 @@ int main(int argc, const char * argv[]) {
     std::cout << (testFloat % 360) << std::endl;
     
     
-    
-    
     for(int i = 0; i < rootObject.children.size(); i++)
     {
         if(rootObject.children[i].type == 10)
@@ -99,6 +98,7 @@ int main(int argc, const char * argv[]) {
             rootObject.children[i]  = optimizer.optimize();
         }
     }
+ 
     
 //	==================
 //	Visualization part
