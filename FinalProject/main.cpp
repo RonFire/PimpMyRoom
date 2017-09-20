@@ -22,38 +22,32 @@ int main(int argc, const char * argv[]) {
 //	Create Test SceneObject
 //	==================
     
-    SceneObject firstChairObject1 = SceneObject();
-    firstChairObject1.setType(0);
-    firstChairObject1.diagLength = sqrtf(0.5);
-    
-    SceneObject firstChairObject2 = SceneObject();
-    firstChairObject2.setType(0);
-    firstChairObject2.diagLength = sqrtf(0.5);
-    
 	SceneObject firstChairObject = SceneObject();
 	firstChairObject.setType(0);
     firstChairObject.diagLength = sqrtf(0.5);
-	//firstChairObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
-	//firstChairObject.setAngle(45.0);
+    firstChairObject.length = 1.0;
+    firstChairObject.height = 1.0;
+    firstChairObject.width = 1.0;
 	
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
-    firstChairObject.diagLength = sqrtf(0.5);
-	//cupboardObject.setPosition(glm::vec3(1.5f, 0.0f, -1.5f));
-	//cupboardObject.setAngle(-30.0);
-	
+    cupboardObject.diagLength = sqrtf(0.5);
+    cupboardObject.length = 1.0;
+    cupboardObject.height = 2.0;
+	cupboardObject.width = 1.0;
+    
 	SceneObject bookObject = SceneObject();
 	bookObject.setType(20);
 	bookObject.setPosition(glm::vec3(0.0f, 0.725f, 0.0f));
-	//bookObject.setAngle(45.0);
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
-    tableObject.diagLength = sqrt(3.25);
-	//tableObject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	//tableObject.setAngle(15.0);
+    tableObject.diagLength = sqrtf(3.25);
 	tableObject.children.push_back(bookObject);
-	
+    tableObject.length = 2.0;
+    tableObject.height = 1.2;
+    tableObject.width = 3.0;
+    
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
 	
@@ -64,7 +58,11 @@ int main(int argc, const char * argv[]) {
 	floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
+    floorObject.children.push_back(firstChairObject);
 	floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
     
 	
 	SceneObject rootObject = SceneObject();
@@ -76,12 +74,20 @@ int main(int argc, const char * argv[]) {
                                          3, 2, 1, 2);
     
     glm::mat2x2 rot(cos(90 * M_PI/180), sin(90* M_PI/180), -sin(90* M_PI/180), cos(90* M_PI/180));
-    
+    glm::mat2x2 rot2(cos(-90 * M_PI/180), sin(-90* M_PI/180), -sin(-90* M_PI/180), cos(-90* M_PI/180));
     //std::cout << cos(90* M_PI/180) << std::endl;
+    
+    glm::mat4x2 testMat = rot2 * rot * rot * rootObject.boundingBox;
     
     rootObject.boundingBox = rot * rootObject.boundingBox;
     
-    glm::vec2 testVec = rootObject.boundingBox[1];
+    glm::vec2 testVec = rootObject.boundingBox[3];
+    int testFloat = rootObject.boundingBox[3][1];
+    //rootObject.boundingBox[3] -= testVec;
+    glm::vec2 testVec2 = rootObject.boundingBox[3];
+    
+    std::cout << (testFloat % 360) << std::endl;
+    
     
     
     
@@ -93,7 +99,7 @@ int main(int argc, const char * argv[]) {
             rootObject.children[i]  = optimizer.optimize();
         }
     }
-	
+    
 //	==================
 //	Visualization part
 //	==================
