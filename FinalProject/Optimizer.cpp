@@ -20,9 +20,8 @@ inline float cosDeg(float angle)
 
 inline glm::vec2 getRotatedPoint(float angle, float px, float py, float cx, float cy)
 {
-    glm::vec2 point(cosDeg(angle) * (px - cx) + sinDeg(angle) * (py - cy) + cx,
+    return glm::vec2(cosDeg(angle) * (px - cx) + sinDeg(angle) * (py - cy) + cx,
                     -sinDeg(angle) * (px - cx) + cosDeg(angle) * (py - cy) + cy);
-    return point;
 }
 
 inline float getDistanceToNearestWall(float l1x, float l1y, float l2x, float l2y, float x, float y)
@@ -66,7 +65,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     }
     //top wall
     p1 = glm::vec2(4.5, -4.5);
-    p2 = glm::vec2(4.5, 4.5);
+    p2 = glm::vec2(-4.5, -4.5);
     distance = getDistanceToNearestWall(p1.x, p1.y, p2.x, p2.y, x, y);
     if(distance < smallestDistance)
     {
@@ -75,6 +74,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     }
     
     cost = smallestDistance;
+    cost += fabsf(wallOrientation - angle) * 0.05;
     
     return cost;
 }
@@ -126,7 +126,7 @@ void Optimizer::modifySceneGraph()
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::normal_distribution<float> distribution(0.0, (0.3 * temperature/10.0));
     //std::uniform_real_distribution<> distribution(-4.5, 4.5);
-    std::uniform_int_distribution<> angle(-360, 360);
+    std::normal_distribution<float> angle(0.0, temperature * 3.0);
     
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
@@ -142,9 +142,14 @@ void Optimizer::modifySceneGraph()
             
             oldAngle += angle(gen);
             if(oldAngle < 0.0)
-                oldAngle += 360;
+                oldAngle += 360.0;
             else
-                oldAngle = (oldAngle % 360);
+            {
+                while(oldAngle > 360.0)
+                {
+                    oldAngle -= 360.0;
+                }
+            }
             
             glm::vec2 p1(newCenter[0] - (objectLength / 2.0),
                          newCenter[1] - (objectWidth / 2.0));
