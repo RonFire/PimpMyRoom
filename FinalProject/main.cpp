@@ -31,6 +31,7 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
+    //cupboardObject.setPosition(glm::vec3(4.5f, 0.0f, 4.5f));
     cupboardObject.diagLength = sqrtf(0.5);
     cupboardObject.length = 1.0;
     cupboardObject.height = 2.0;
@@ -121,12 +122,21 @@ int main(int argc, const char * argv[]) {
     p4[0] = p4x;
     p4[1] = p4y;
     
+    std::default_random_engine generator;
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::normal_distribution<float> distribution(0.0, 1.0);
+    
+    for(int i = 0; i < 100; i++)
+    {
+        //std::cout << distribution(generator) << std::endl;
+    }
     
     for(int i = 0; i < rootObject.children.size(); i++)
     {
         if(rootObject.children[i].type == 10)
         {
-            Optimizer optimizer(rootObject.children[i], 10000, 1);
+            Optimizer optimizer(rootObject.children[i], 100, 0.01);
             rootObject.children[i]  = optimizer.optimize();
         }
     }

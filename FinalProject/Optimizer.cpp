@@ -25,6 +25,60 @@ inline glm::vec2 getRotatedPoint(float angle, float px, float py, float cx, floa
     return point;
 }
 
+inline float getDistanceToNearestWall(float l1x, float l1y, float l2x, float l2y, float x, float y)
+{
+    return fabsf((l2y - l1y) * x - (l2x - l1x) * y + l2x * l1y - l2y *l1x) / sqrtf(powf((l2y - l1y), 2.0) + powf((l2x - l1x), 2.0));
+}
+
+inline float calculateNearestWallCost(float x, float y, float angle)
+{
+    float distance = 0.0;
+    float smallestDistance = 1000.0;
+    float wallOrientation = 0.0;
+    float cost = 0.0;
+    
+    //right wall
+    glm::vec2 p1(4.5, -4.5);
+    glm::vec2 p2(4.5, 4.5);
+    distance = getDistanceToNearestWall(p1.x, p1.y, p2.x, p2.y, x, y);
+    if(distance < smallestDistance)
+    {
+        smallestDistance = distance;
+        wallOrientation = 180.0;
+    }
+    //bottom wall
+    p1 = glm::vec2(4.5, 4.5);
+    p2 = glm::vec2(-4.5, 4.5);
+    distance = getDistanceToNearestWall(p1.x, p1.y, p2.x, p2.y, x, y);
+    if(distance < smallestDistance)
+    {
+        smallestDistance = distance;
+        wallOrientation = 270.0;
+    }
+    //left wall
+    p1 = glm::vec2(-4.5, -4.5);
+    p2 = glm::vec2(-4.5, 4.5);
+    distance = getDistanceToNearestWall(p1.x, p1.y, p2.x, p2.y, x, y);
+    if(distance < smallestDistance)
+    {
+        smallestDistance = distance;
+        wallOrientation = 0.0;
+    }
+    //top wall
+    p1 = glm::vec2(4.5, -4.5);
+    p2 = glm::vec2(4.5, 4.5);
+    distance = getDistanceToNearestWall(p1.x, p1.y, p2.x, p2.y, x, y);
+    if(distance < smallestDistance)
+    {
+        smallestDistance = distance;
+        wallOrientation = 90.0;
+    }
+    
+    cost = smallestDistance;
+    
+    return cost;
+}
+
 Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, double coolingRateInput)
 {
     sceneGraph = sceneGraphInput;
@@ -45,9 +99,16 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
     //return pow(4.0 - distance, 2.0);
     
     float cost = 0.0;
+    SceneObject currentObject;
+    SceneObject compareObject;
     
     for(int i = 0; i < sceneGraph->children.size(); i++)
     {
+        currentObject = sceneGraph->children[i];
+        if(currentObject.type == 2)
+        {
+            cost += calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
+        }
         for(int j = 0; j < sceneGraph->children.size(); j++)
         {
             if(i != j)
@@ -63,9 +124,8 @@ void Optimizer::modifySceneGraph()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::default_random_engine generator;
-    std::normal_distribution<float> distribution(0.0, 0.5 * (temperature/factor));
-    
+    std::normal_distribution<float> distribution(0.0, (0.3 * temperature/10.0));
+    //std::uniform_real_distribution<> distribution(-4.5, 4.5);
     std::uniform_int_distribution<> angle(-360, 360);
     
     for(int i = 0; i < modifiedGraph.children.size(); i++)
@@ -77,7 +137,7 @@ void Optimizer::modifySceneGraph()
             float objectWidth = modifiedGraph.children[i].width;
             int oldAngle = modifiedGraph.children[i].angle;
             
-            glm::vec2 addVec(distribution(generator), distribution(generator));
+            glm::vec2 addVec(distribution(gen), distribution(gen));
             newCenter += addVec;
             
             oldAngle += angle(gen);
@@ -146,7 +206,7 @@ double Optimizer::calculateAcceptanceProbability(double currentEnergy, double ne
         return 1.0;
     }
     // If the new solution is worse, calculate an acceptance probability
-    return exp((currentEnergy - newEnergy) / temperature);
+    return expf((currentEnergy - newEnergy) / (temperature/10.0));
 };
 
 SceneObject Optimizer::optimize()
@@ -160,7 +220,7 @@ SceneObject Optimizer::optimize()
     //std::cout << copy.size() << std::endl;
     std::cout << "initial cost:" << calculateEnergy(&sceneGraph) << std::endl;
     
-    while(temperature > 1.0)
+    while(temperature > 0.0)
     {
         for(int i = 0; i < 100; i++)
         {
