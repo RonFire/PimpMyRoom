@@ -24,18 +24,18 @@ int main(int argc, const char * argv[]) {
     
 	SceneObject firstChairObject = SceneObject();
 	firstChairObject.setType(0);
-    firstChairObject.diagLength = sqrtf(0.5);
     firstChairObject.length = 1.0;
     firstChairObject.height = 1.0;
     firstChairObject.width = 1.0;
+    firstChairObject.init();
 	
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
     //cupboardObject.setPosition(glm::vec3(4.5f, 0.0f, 4.5f));
-    cupboardObject.diagLength = sqrtf(0.5);
     cupboardObject.length = 1.0;
     cupboardObject.height = 2.0;
 	cupboardObject.width = 1.0;
+    cupboardObject.init();
     
 	SceneObject bookObject = SceneObject();
 	bookObject.setType(20);
@@ -44,11 +44,11 @@ int main(int argc, const char * argv[]) {
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
     tableObject.setPosition(glm::vec3(1.0f, 0.0f, 1.5f));
-    tableObject.diagLength = sqrtf(3.25);
 	tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
     tableObject.height = 1.2;
     tableObject.width = 3.0;
+    tableObject.init();
     
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
@@ -125,7 +125,7 @@ int main(int argc, const char * argv[]) {
     std::default_random_engine generator;
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::normal_distribution<float> distribution(0.0, 1.0);
+    std::normal_distribution<float> distribution(0.0f, 1.0f);
     
     for(int i = 0; i < 100; i++)
     {
@@ -136,7 +136,7 @@ int main(int argc, const char * argv[]) {
     {
         if(rootObject.children[i].type == 10)
         {
-            Optimizer optimizer(rootObject.children[i], 100, 0.01);
+            Optimizer optimizer(rootObject.children[i], 1.0f, 0.0001f);
             rootObject.children[i]  = optimizer.optimize();
         }
     }

@@ -47,3 +47,21 @@ void SceneObject::draw(ResourceManager &resourceManager)
 	}
 	
 }
+
+void SceneObject::init()
+{
+    glm::vec2 p1(position.x - (length / 2.0),
+                 position.z - (width / 2.0));
+    
+    glm::vec2 p2(position.x + (length / 2.0),
+                 position.z - (width / 2.0));
+    
+    glm::vec2 p3(position.x + (length / 2.0),
+                 position.z + (width / 2.0));
+    
+    glm::vec2 p4(position.x - (length / 2.0),
+                 position.z + (width / 2.0));
+    
+    boundingBox = glm::mat4x2(p1, p2, p3, p4);
+    diagLength = sqrtf(powf(length, 2.0) + powf(width, 2.0)) / 2.0;
+}
