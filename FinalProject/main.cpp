@@ -65,6 +65,7 @@ int main(int argc, const char * argv[]) {
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
+    //floorObject.children.push_back(cupboardObject);
     
 	
 	SceneObject rootObject = SceneObject();
@@ -136,7 +137,7 @@ int main(int argc, const char * argv[]) {
     {
         if(rootObject.children[i].type == 10)
         {
-            Optimizer optimizer(rootObject.children[i], 1.0f, 0.0001f);
+            Optimizer optimizer(rootObject.children[i], 1.0f, 0.00001f);
             rootObject.children[i]  = optimizer.optimize();
         }
     }
