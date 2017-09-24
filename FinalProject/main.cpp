@@ -24,40 +24,44 @@ int main(int argc, const char * argv[]) {
 	SceneObject firstChairObject = SceneObject();
 	firstChairObject.setType(0);
 	firstChairObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
-	firstChairObject.setAngle(45.0);
+	firstChairObject.setAngle(0.0);
+	firstChairObject.setPath("resource/armchair/fauteuil.obj");
 	
 	SceneObject secondChair = SceneObject();
 	secondChair.setType(0);
 	secondChair.setPosition(glm::vec3(-1.5f, 0.0f, -1.0f));
-	secondChair.setAngle(90.0);
+	secondChair.setAngle(0.0);
+	secondChair.setPath("resource/armchair/fauteuil.obj");
 	
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
 	cupboardObject.setPosition(glm::vec3(1.5f, 0.0f, -1.5f));
-	cupboardObject.setAngle(-30.0);
+	cupboardObject.setAngle(0.0);
+	cupboardObject.setPath("resource/cupboard/cupboard.obj");
 	
 	SceneObject secondCupboard = SceneObject();
 	secondCupboard.setType(2);
 	secondCupboard.setPosition(glm::vec3(4.0f, 0.0f, -2.0f));
-	secondCupboard.setAngle(-45.0);
-	secondCupboard.setPath("resource/nanosuit/nanosuit.obj");
+	secondCupboard.setAngle(0.0);
+	secondCupboard.setPath("resource/cupboard/cupboard.obj");
 	
 	SceneObject bookObject = SceneObject();
 	bookObject.setType(20);
 	bookObject.setPosition(glm::vec3(0.0f, 0.725f, 0.0f));
-	bookObject.setAngle(45.0);
+	bookObject.setAngle(0.0);
 	
 	SceneObject secondBook = SceneObject();
 	secondBook.setType(20);
 	secondBook.setPosition(glm::vec3(0.3f, 0.725f, -0.7f));
-	secondBook.setAngle(23.0);
+	secondBook.setAngle(0.0);
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
 	tableObject.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	tableObject.setAngle(15.0);
+	tableObject.setAngle(0.0);
 	tableObject.children.push_back(bookObject);
 	tableObject.children.push_back(secondBook);
+	tableObject.setPath("resource/table/table.obj");
 	
 	SceneObject door = SceneObject();
 	door.setType(3);

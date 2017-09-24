@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/Visualizer.cpp"
-            timestampString = "525558070.414483"
+            timestampString = "527891071.569296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "Visualizer::doVisualisation(SceneObject *sceneObject)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/Visualizer.cpp"
-            timestampString = "525558070.414483"
+            timestampString = "527891071.569296"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
             landmarkName = "Visualizer::doVisualisation(SceneObject *sceneObject)"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/SceneObject.cpp"
-            timestampString = "525558282.277386"
+            timestampString = "527966972.368784"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -80,6 +80,22 @@
             startingLineNumber = "94"
             endingLineNumber = "94"
             landmarkName = "ProcessKeyboard(Camera_Movement direction, float deltaTime)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FinalProject/SceneObject.cpp"
+            timestampString = "527968766.053725"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "SceneObject::draw(ResourceManager &amp;resourceManager)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

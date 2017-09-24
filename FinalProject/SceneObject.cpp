@@ -54,8 +54,17 @@ void SceneObject::draw(ResourceManager &resourceManager)
 		delete [] cstr;
 		glm::mat4 model;
 		model = glm::translate(model, this->position);
-		model = glm::translate(model, glm::vec3(0.0f, -0.5f, 0.0f));
 		model = glm::rotate(model, glm::radians(this->angle), glm::vec3(0.0f, 1.0f, 0.0f));
+		if (this->type == 0) {
+			model = glm::translate(model, glm::vec3(0.0f, 0.15f, 0.0f));
+			model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		} else if (this->type == 1) {
+			model = glm::translate(model, glm::vec3(0.0f, -0.51f, 0.0f));
+			model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		} else if (this->type == 2) {
+			model = glm::translate(model, glm::vec3(0.0f, 0.67f, 0.0f));
+		}
 		model = glm::scale(model, resourceManager.getScaling(this->type));
 		shader->setMat4("model", model);
 		figure.Draw(*shader);
