@@ -178,10 +178,11 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
         }
         if(currentObject.type == 2)
         {
+            
             cost += 3.0f * calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
-            cost += 2.0f * fabsf(currentObject.length - smallestPartnerDistance);
+            cost += 3.0f * fabsf(currentObject.length - smallestPartnerDistance);
             cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
-            cost -= distanceToPartnerCost;
+            //cost -= distanceToPartnerCost;
             
         }
     }
@@ -268,9 +269,74 @@ void Optimizer::modifySceneGraph()
         {
             for(int j = 0; j < modifiedGraph.children[i].children.size(); j++)
             {
-                modifiedGraph.children[i].children[j].position[0] = modifiedGraph.children[i].position[0];
-                modifiedGraph.children[i].children[j].position[2] = modifiedGraph.children[i].position[2];
-                modifiedGraph.children[i].children[j].setAngle(angle(gen));
+                std::normal_distribution<float> childDistr(0.0f, (0.7f * temperature / 10.0f));
+                //modifiedGraph.children[i].children[j].position[0] = modifiedGraph.children[i].position[0];
+                //modifiedGraph.children[i].children[j].position[2] = modifiedGraph.children[i].position[2];
+                //modifiedGraph.children[i].children[j].setAngle(angle(gen));
+                while (true)
+                {
+                glm::vec2 newCenter(modifiedGraph.children[i].children[j].position[0], modifiedGraph.children[i].children[j].position[2]);
+                float objectLength = modifiedGraph.children[i].children[j].length;
+                float objectWidth = modifiedGraph.children[i].children[j].width;
+                float oldAngle = modifiedGraph.children[i].children[j].angle;
+                
+                glm::vec2 addVec(childDistr(gen), childDistr(gen));
+                newCenter += addVec;
+                
+                oldAngle += angle(gen);
+                if(oldAngle < 0.0)
+                    oldAngle += 360.0;
+                else
+                {
+                    while(oldAngle > 360.0)
+                    {
+                        oldAngle -= 360.0;
+                    }
+                }
+                
+                glm::vec2 p1(newCenter[0] - (objectLength / 2.0),
+                             newCenter[1] - (objectWidth / 2.0));
+                
+                glm::vec2 p2(newCenter[0] + (objectLength / 2.0),
+                             newCenter[1] - (objectWidth / 2.0));
+                
+                glm::vec2 p3(newCenter[0] + (objectLength / 2.0),
+                             newCenter[1] + (objectWidth / 2.0));
+                
+                glm::vec2 p4(newCenter[0] - (objectLength / 2.0),
+                             newCenter[1] + (objectWidth / 2.0));
+                
+                p1 = getRotatedPoint(oldAngle, p1[0], p1[1], newCenter[0], newCenter[1]);
+                
+                //std::cout << p1.x << std::endl;
+                
+                if(p1[0] < -1.5 || p1[0] > 1.5)
+                    continue;
+                if(p1[1] < -1.0 || p1[1] > 1.0)
+                    continue;
+                
+                p2 = getRotatedPoint(oldAngle, p2[0], p2[1], newCenter[0], newCenter[1]);
+                if(p2[0] < -1.5 || p2[0] > 1.5)
+                    continue;
+                if(p2[1] < -1.0 || p2[1] > 1.0)
+                    continue;
+                
+                p3 = getRotatedPoint(oldAngle, p3[0], p3[1], newCenter[0], newCenter[1]);
+                if(p3[0] < -1.5 || p3[0] > 1.5)
+                    continue;
+                if(p3[1] < -1.0 || p3[1] > 1.0)
+                    continue;
+                
+                p4 = getRotatedPoint(oldAngle, p4[0], p4[1], newCenter[0], newCenter[1]);
+                if(p4[0] < -1.5 || p4[0] > 1.5)
+                    continue;
+                if(p4[1] < -1.0 || p4[1] > 1.0)
+                    continue;
+                    modifiedGraph.children[i].children[j].position[0] = newCenter[0];
+                    modifiedGraph.children[i].children[j].position[2] = newCenter[1];
+                    modifiedGraph.children[i].children[j].angle = oldAngle;
+                    break;
+                }
             }
         }
     }

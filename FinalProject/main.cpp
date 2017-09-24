@@ -40,6 +40,10 @@ int main(int argc, const char * argv[]) {
 	SceneObject bookObject = SceneObject();
 	bookObject.setType(20);
 	bookObject.setPosition(glm::vec3(0.0f, 0.725f, 0.0f));
+    bookObject.length = 0.3;
+    bookObject.height = 0.05;
+    bookObject.width = 0.2;
+    bookObject.init();
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
@@ -60,11 +64,10 @@ int main(int argc, const char * argv[]) {
 	floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
+    
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
-    floorObject.children.push_back(cupboardObject);
-
     
 	SceneObject rootObject = SceneObject();
 	rootObject.setType(99);
