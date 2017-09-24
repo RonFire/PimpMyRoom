@@ -72,7 +72,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
-        wallOrientation = 180.0;
+        wallOrientation = 270.0;
     }
     //bottom wall
     p1 = glm::vec2(4.5, 4.5);
@@ -81,7 +81,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
-        wallOrientation = 90.0;
+        wallOrientation = 180.0;
     }
     //left wall
     p1 = glm::vec2(-4.5, -4.5);
@@ -90,7 +90,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
-        wallOrientation = 0.0;
+        wallOrientation = 90.0;
     }
     //top wall
     p1 = glm::vec2(4.5, -4.5);
@@ -99,70 +99,13 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
-        wallOrientation = 270.0;
+        wallOrientation = 0.0;
     }
     
     cost = smallestDistance;
     cost += fabsf(wallOrientation - angle) * 0.05;
     
     return cost;
-}
-
-inline float calculateTableDistanceCost(glm::mat4x2 boundingBox, glm::vec3 center, glm::vec3 comparePosition, float compareAngle)
-{
-    float distance = 0.0;
-    float smallestDistance = 1000.0;
-    
-    glm::vec2 p1 = boundingBox[0];
-    glm::vec2 p2 = boundingBox[1];
-    glm::vec2 p3 = boundingBox[2];
-    glm::vec2 p4 = boundingBox[3];
-    
-    float x = p1.x;
-    float y = p1.y;
-    
-    distance = getDistanceToNearestWall(p1, p2, glm::vec2(comparePosition.x, comparePosition.z));
-    if(distance < smallestDistance)
-    {
-        smallestDistance = distance;
-    }
-    
-    distance = getDistanceToNearestWall(p2, p3, glm::vec2(comparePosition.x, comparePosition.z));
-    if(distance < smallestDistance)
-    {
-        smallestDistance = distance;
-    }
-    
-    distance = getDistanceToNearestWall(p3, p4, glm::vec2(comparePosition.x, comparePosition.z));
-    if(distance < smallestDistance)
-    {
-        smallestDistance = distance;
-    }
-    
-    distance = getDistanceToNearestWall(p4, p1, glm::vec2(comparePosition.x, comparePosition.z));
-    if(distance < smallestDistance)
-    {
-        smallestDistance = distance;
-    }
-    
-    double dotp = dot(glm::vec2(center.x, -center.z), glm::vec2(comparePosition.x, -comparePosition.z));
-    double a = dotp / (norm(glm::vec2(center.x, -center.z)) * norm(glm::vec2(comparePosition.x, -comparePosition.z)));
-    double angle;
-    
-    if (a >= 1.0)
-    {
-        angle =  0.0;
-    }
-    else if (a <= -1.0)
-    {
-        angle =  M_PI;
-    }
-    else
-    {
-        angle =  acosf(a);
-    }
-    std::cout << angle << std::endl;
-    return fabsf(1.0f - smallestDistance);
 }
 
 Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, double coolingRateInput)
@@ -202,13 +145,15 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
         for(int j = 0; j < sceneGraph->children.size(); j++)
         {
             compareObject = sceneGraph->children[j];
+            //cost to keep the door free of objects
+            cost += fmaxf(0.0, 1.0 - (sqrtf(powf(currentObject.position[0] - 0.0f, 2.0) + powf(currentObject.position[2] - 4.0f, 2.0)) / (currentObject.diagLength + sqrtf(8.0f)/2.0f)));
             if(i != j)
             {
                 //distanceToPartnerObject = dist(glm::vec2(currentObject.position.x, currentObject.position.z),
                 //                               glm::vec2(compareObject.position.x, compareObject.position.z));
                 distanceToPartnerObject = sqrtf(powf(currentObject.position[0] - compareObject.position[0], 2.0) + powf(currentObject.position[2] - compareObject.position[2], 2.0));
-                //cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.diagLength + compareObject.diagLength)));
-                cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.length + compareObject.length)));
+                cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.diagLength + compareObject.diagLength)));
+                //cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.length/2.0f + compareObject.length/2.0f)));
                 if(currentObject.type == 2 && compareObject.type == 2)
                 {
                     if(distanceToPartnerObject < smallestPartnerDistance)
@@ -234,7 +179,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
         if(currentObject.type == 2)
         {
             cost += 3.0f * calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
-            cost += 2.0f * fabsf(1.0 - smallestPartnerDistance);
+            cost += 2.0f * fabsf(currentObject.length - smallestPartnerDistance);
             cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
             cost -= distanceToPartnerCost;
             
@@ -378,7 +323,7 @@ SceneObject Optimizer::optimize()
             }
             modifiedGraph = sceneGraph;
         }
-        std::cout << calculateEnergy(&sceneGraph) << std::endl;
+        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
         temperature -= coolingRate;
     }
     
