@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
 	SceneObject firstChairObject = SceneObject();
 	firstChairObject.setType(0);
 	firstChairObject.setPosition(glm::vec3(-1.5f,  0.0f, -2.5f));
-	firstChairObject.setAngle(0.0);
+	firstChairObject.setAngle(-45.0);
 	firstChairObject.setPath("resource/armchair/fauteuil.obj");
 	
 	SceneObject secondChair = SceneObject();
