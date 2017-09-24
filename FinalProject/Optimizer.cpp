@@ -207,8 +207,8 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                 //distanceToPartnerObject = dist(glm::vec2(currentObject.position.x, currentObject.position.z),
                 //                               glm::vec2(compareObject.position.x, compareObject.position.z));
                 distanceToPartnerObject = sqrtf(powf(currentObject.position[0] - compareObject.position[0], 2.0) + powf(currentObject.position[2] - compareObject.position[2], 2.0));
-                //if(!(currentObject.type == 2 && compareObject.type == 2))
-                    cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.diagLength + compareObject.diagLength)));
+                //cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.diagLength + compareObject.diagLength)));
+                cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.length + compareObject.length)));
                 if(currentObject.type == 2 && compareObject.type == 2)
                 {
                     if(distanceToPartnerObject < smallestPartnerDistance)
@@ -221,7 +221,11 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                 if(currentObject.type == 1 && compareObject.type == 0)
                 {
                     cost += fabsf((currentObject.diagLength + compareObject.diagLength) - dist(glm::vec2(currentObject.position.x, currentObject.position.z), glm::vec2(compareObject.position.x, compareObject.position.z)));
-                   
+                    float angle = atan2(currentObject.position.x - compareObject.position.x, currentObject.position.z - compareObject.position.z);
+                    angle *= (180.0f/M_PI);
+                    if(angle < 0.0f)
+                        angle += 360.0f;
+                    cost += fabs(angle - compareObject.angle) * 0.1;
                     
                     //calculateTableDistanceCost(currentObject.boundingBox, currentObject.position, compareObject.position, compareObject.angle);
                 }
@@ -229,7 +233,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
         }
         if(currentObject.type == 2)
         {
-            cost += 2.0f * calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
+            cost += 3.0f * calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
             cost += 2.0f * fabsf(1.0 - smallestPartnerDistance);
             cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
             cost -= distanceToPartnerCost;
@@ -243,9 +247,9 @@ void Optimizer::modifySceneGraph()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::normal_distribution<float> distribution(0.0f, (0.3f * temperature/10.0f));
+    std::normal_distribution<float> distribution(0.0f, (0.7f * temperature));
     //std::uniform_real_distribution<> distribution(-4.5, 4.5);
-    std::normal_distribution<float> angle(0.0f, temperature * 5.0f);
+    std::normal_distribution<float> angle(0.0f, temperature * 10.0f);
     
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
@@ -340,7 +344,7 @@ double Optimizer::calculateAcceptanceProbability(double currentEnergy, double ne
     //std::cout << (temperature/10.0) << std::endl;
     //std::cout << expf(temperature -2)  << std::endl;
     
-    return exp((currentEnergy - newEnergy) / (temperature/1.0f));
+    return exp((currentEnergy - newEnergy) / (temperature * 2.0f));
 };
 
 SceneObject Optimizer::optimize()
@@ -374,7 +378,7 @@ SceneObject Optimizer::optimize()
             }
             modifiedGraph = sceneGraph;
         }
-        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
+        std::cout << calculateEnergy(&sceneGraph) << std::endl;
         temperature -= coolingRate;
     }
     
