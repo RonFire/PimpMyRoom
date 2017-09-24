@@ -56,6 +56,10 @@ int main(int argc, const char * argv[]) {
     
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
+	wallObject.children.push_back(door);
+	
+	SceneObject ceilingObject = SceneObject();
+	ceilingObject.setType(12);
 	
 	SceneObject floorObject = SceneObject();
 	floorObject.setType(10);
@@ -73,6 +77,7 @@ int main(int argc, const char * argv[]) {
 	rootObject.setType(99);
 	rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
 	rootObject.children.push_back(wallObject);
+	rootObject.children.push_back(ceilingObject);
 	rootObject.children.push_back(floorObject);
     
     

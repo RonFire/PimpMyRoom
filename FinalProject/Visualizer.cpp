@@ -20,7 +20,7 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-Camera camera(glm::vec3(0.0, 1.76, 3.0));
+Camera camera(glm::vec3(0.0, 1.26, 3.0));  // imitates height of 1.76m
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -72,21 +72,24 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 	// cursor configuration
 	// --------------------
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	//	===============
-	//	vertex data
+	//	vertex data for pointlights
 	//	===============
 	
 	float vertices[] = {
 		// positions          // normals           // texture coords
-		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 0.0f,
-		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
+		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
 		-1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+		1.0f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  2.0f, 1.0f,
 		-1.0f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 		
 		-1.0f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,   0.0f, 0.0f,
@@ -103,11 +106,11 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		-1.0f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
 		-1.0f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		
-		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		1.0f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
-		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
 		1.0f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+		1.0f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
 		1.0f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
 		
 		-1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
@@ -117,11 +120,11 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		-1.0f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
 		-1.0f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
 		
-		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 		1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 1.0f,
-		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
+		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
 		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
 		-1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		1.0f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  2.0f, 0.0f,
 		-1.0f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
 	
@@ -159,11 +162,16 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	Shader boxShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader floorShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader wallShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
+	Shader ceilingShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
+	Shader doorShader("shaders/VertexShader.glsl", "shaders/FragmentShader.glsl");
 	Shader lampShader("shaders/LampVertexShader.glsl", "shaders/LampFragmentShader.glsl");
+	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
 	resourceManager.shader.push_back(&boxShader);
 	resourceManager.shader.push_back(&floorShader);
 	resourceManager.shader.push_back(&wallShader);
-//	Shader modelShader("shaders/ModelVertexShader.glsl", "shaders/ModelFragmentShader.glsl");
+	resourceManager.shader.push_back(&ceilingShader);
+	resourceManager.shader.push_back(&doorShader);
+	resourceManager.shader.push_back(&modelShader);
 	
 	// ===============
 	// Texture Code
@@ -171,21 +179,34 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 	unsigned int diffuseMap = loadTexture("resource/textures/container.png");
 	unsigned int specularMap = loadTexture("resource/textures/container_specular.png");
 	unsigned int floorDiffuseMap = loadTexture("resource/textures/floor.jpg");
-	unsigned int wallDiffuesMap = loadTexture("resource/textures/wall.jpg");
-	unsigned int wallSpecularMap = loadTexture("resource/textures/black.png");
+	unsigned int wallDiffuseMap = loadTexture("resource/textures/wall.jpg");
+	unsigned int ceilingDiffuseMap = loadTexture("resource/textures/ceiling.jpg");
+	unsigned int doorDiffuseMap = loadTexture("resource/textures/door.png");
 	
-//	Model ourModel("resource/armchair/Armchair.3ds");
+	unsigned int blackSpecularMap = loadTexture("resource/textures/black.png");
+	
+	// ===========================================
+	// Set Texture Positions for different shaders
+	// ===========================================
 	floorShader.use();
-	floorShader.setInt("material.diffuse", 3);
-	floorShader.setInt("material.specular", 3);
+	floorShader.setInt("material.diffuse", 12);
+	floorShader.setInt("material.specular", 12);
 	
 	wallShader.use();
-	wallShader.setInt("material.diffuse", 4);
-	wallShader.setInt("material.specular", 5);
+	wallShader.setInt("material.diffuse", 13);
+	wallShader.setInt("material.specular", 14);
+	
+	ceilingShader.use();
+	ceilingShader.setInt("material.diffuse", 16);
+	ceilingShader.setInt("material.specular", 16);
+	
+	doorShader.use();
+	doorShader.setInt("material.diffuse", 15);
+	doorShader.setInt("material.specular", 15);
 	
 	boxShader.use();
-	boxShader.setInt("material.diffuse", 0);
-	boxShader.setInt("material.specular", 1);
+	boxShader.setInt("material.diffuse", 10);
+	boxShader.setInt("material.specular", 11);
 	
 	//	=======================
 	//	rendering loop starts here
@@ -207,20 +228,28 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		//		glDrawArrays(GL_TRIANGLES, 0, 3);     // This is the VBO case
 		
-		glActiveTexture(GL_TEXTURE0);
+		// bind textures to GPU
+		// ====================
+		glActiveTexture(GL_TEXTURE10);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture(GL_TEXTURE11);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
-		glActiveTexture(GL_TEXTURE3);
+		glActiveTexture(GL_TEXTURE12);
 		glBindTexture(GL_TEXTURE_2D, floorDiffuseMap);
-		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, wallDiffuesMap);
-		glActiveTexture(GL_TEXTURE5);
-		glBindTexture(GL_TEXTURE_2D, wallSpecularMap);
+		glActiveTexture(GL_TEXTURE13);
+		glBindTexture(GL_TEXTURE_2D, wallDiffuseMap);
+		glActiveTexture(GL_TEXTURE14);
+		glBindTexture(GL_TEXTURE_2D, blackSpecularMap);
+		glActiveTexture(GL_TEXTURE15);
+		glBindTexture(GL_TEXTURE_2D, doorDiffuseMap);
+		glActiveTexture(GL_TEXTURE16);
+		glBindTexture(GL_TEXTURE_2D, ceilingDiffuseMap);
 		
 
+		// =======================
+		// lightsource input for shaders
+		// =======================
 		boxShader.use();
 		boxShader.setVec3("viewPosition", camera.Position);
 		boxShader.setFloat("material.shininess", 32.0f);
@@ -309,23 +338,66 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 		// -----------------
 		wallShader.setMat4("projection", projection);
 		
-//		glBindVertexArray(resourceManager.getVAO(1));
-		// model matrix
-		// ------------
-//		glm::mat4 model;
-		// passing transformation to shader
-//		boxShader.setMat4("model", model);
-//		glDrawArrays(GL_TRIANGLES, 0, 36);
+		ceilingShader.use();
+		ceilingShader.setVec3("viewPosition", camera.Position);
+		ceilingShader.setFloat("material.shininess", 32.0f);
 		
+		// point light 1
+		ceilingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		ceilingShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		ceilingShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		ceilingShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		ceilingShader.setFloat("pointLights[0].constant", 1.0f);
+		ceilingShader.setFloat("pointLights[0].linear", 0.09);
+		ceilingShader.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		ceilingShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		ceilingShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		ceilingShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		ceilingShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		ceilingShader.setFloat("pointLights[1].constant", 1.0f);
+		ceilingShader.setFloat("pointLights[1].linear", 0.09);
+		ceilingShader.setFloat("pointLights[1].quadratic", 0.032);
 		
-//		for (unsigned int i=0; i<(sizeof(cubePositions)/sizeof(*cubePositions)); i++) {
-//			glm::mat4 model;
-//			model = glm::translate(model, cubePositions[i]);
-//			float angle = 20.0f * i;
-//			model = glm::rotate(model, glm::radians(angle), glm::vec3(0.0f, 1.0f, 0.0f));
-//			boxShader.setMat4("model", model);
-//			glDrawArrays(GL_TRIANGLES, 0, 36);
-//		}
+		// view matrix with camera
+		// -----------------------
+		ceilingShader.setMat4("view", view);
+		// projection matrix
+		// -----------------
+		ceilingShader.setMat4("projection", projection);
+		
+		doorShader.use();
+		doorShader.setVec3("viewPosition", camera.Position);
+		doorShader.setFloat("material.shininess", 32.0f);
+		
+		// point light 1
+		doorShader.setVec3("pointLights[0].position", pointLightPositions[0]);
+		doorShader.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		doorShader.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		doorShader.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		doorShader.setFloat("pointLights[0].constant", 1.0f);
+		doorShader.setFloat("pointLights[0].linear", 0.09);
+		doorShader.setFloat("pointLights[0].quadratic", 0.032);
+		// point light 2
+		doorShader.setVec3("pointLights[1].position", pointLightPositions[1]);
+		doorShader.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		doorShader.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		doorShader.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		doorShader.setFloat("pointLights[1].constant", 1.0f);
+		doorShader.setFloat("pointLights[1].linear", 0.09);
+		doorShader.setFloat("pointLights[1].quadratic", 0.032);
+		
+		// view matrix with camera
+		// -----------------------
+		doorShader.setMat4("view", view);
+		// projection matrix
+		// -----------------
+		doorShader.setMat4("projection", projection);
+		
+		modelShader.use();
+		modelShader.setMat4("projection", projection);
+		modelShader.setMat4("view", view);
+		
 		sceneObject->draw(resourceManager);
 		
 		lampShader.use();
@@ -343,28 +415,14 @@ int Visualizer::doVisualisation(SceneObject *sceneObject) {
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 		
-		// render the loaded model
-//		boxShader.use();
-//		boxShader.setMat4("projection", projection);
-//		boxShader.setMat4("view", view);
-//		glm::mat4 modelModel;
-//		modelModel = glm::translate(modelModel, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-//		modelModel = glm::scale(modelModel, glm::vec3(0.02f, 0.02f, 0.02f));	// it's a bit too big for our scene, so scale it down
-//		boxShader.setMat4("model", modelModel);
-//		ourModel.Draw(boxShader);
-		
-//		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		
 		// check and call events and swap buffers
 		// ======================================
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 	
-//	glDeleteVertexArrays(1, &VAO);
 	glDeleteVertexArrays(1, &lightVAO);
 	glDeleteBuffers(1, &lightVBO);
-//	glDeleteBuffers(1, &EBO);
 	
 	// glfw: terminate, clearing all previously allocated GLFW resources
 	// ====================================================================

@@ -27,6 +27,7 @@ public:
     float height = 0.0;
 	GLfloat angle = 0.0;
 	unsigned int type = 0;
+	std::string path = "";
 	
 	SceneObject();
 		
