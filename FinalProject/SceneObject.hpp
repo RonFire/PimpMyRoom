@@ -34,6 +34,7 @@ public:
 	void setType(unsigned int typeParam);
 	void setPosition(glm::vec3 positionParam);
 	void setAngle(GLfloat angleParam);
+	void setPath(std::string pathParam);
     void init();
 	
 	void draw(ResourceManager &resourceManager);

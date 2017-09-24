@@ -28,7 +28,8 @@ int main(int argc, const char * argv[]) {
     firstChairObject.height = 1.0;
     firstChairObject.width = 1.0;
     firstChairObject.init();
-	
+	firstChairObject.setPath("resource/armchair/fauteuil.obj");
+    
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
     //cupboardObject.setPosition(glm::vec3(4.5f, 0.0f, 4.5f));
@@ -36,6 +37,8 @@ int main(int argc, const char * argv[]) {
     cupboardObject.height = 2.0;
 	cupboardObject.width = 1.0;
     cupboardObject.init();
+    
+    cupboardObject.setPath("resource/cupboard/cupboard.obj");
     
 	SceneObject bookObject = SceneObject();
 	bookObject.setType(20);
@@ -53,7 +56,12 @@ int main(int argc, const char * argv[]) {
     tableObject.height = 1.2;
     tableObject.width = 3.0;
     tableObject.init();
-    
+	tableObject.setPath("resource/table/table.obj");
+	
+	SceneObject door = SceneObject();
+	door.setType(3);
+	door.setPosition(glm::vec3(0.0f, 0.0f, 4.99f));
+	
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
 	wallObject.children.push_back(door);
