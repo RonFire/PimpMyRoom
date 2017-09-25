@@ -24,16 +24,16 @@ int main(int argc, const char * argv[]) {
     
 	SceneObject firstChairObject = SceneObject();
 	firstChairObject.setType(0);
-    firstChairObject.length = 1.0;
+    firstChairObject.length = 1.4;
     firstChairObject.height = 1.0;
-    firstChairObject.width = 1.0;
+    firstChairObject.width = 1.44;
     firstChairObject.init();
 	firstChairObject.setPath("resource/armchair/fauteuil.obj");
     
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
     //cupboardObject.setPosition(glm::vec3(4.5f, 0.0f, 4.5f));
-    cupboardObject.length = 1.0;
+    cupboardObject.length = 1.31;
     cupboardObject.height = 2.0;
 	cupboardObject.width = 1.0;
     cupboardObject.init();
@@ -52,9 +52,9 @@ int main(int argc, const char * argv[]) {
 	tableObject.setType(1);
     tableObject.setPosition(glm::vec3(1.0f, 0.0f, 1.5f));
 	tableObject.children.push_back(bookObject);
-    tableObject.length = 2.0;
+    tableObject.length = 1.62;
     tableObject.height = 1.2;
-    tableObject.width = 3.0;
+    tableObject.width = 2.82;
     tableObject.init();
 	tableObject.setPath("resource/table/table.obj");
 	
