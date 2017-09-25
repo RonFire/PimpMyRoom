@@ -66,8 +66,8 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     float cost = 0.0;
     
     //right wall
-    glm::vec2 p1(4.5, -4.5);
-    glm::vec2 p2(4.5, 4.5);
+    glm::vec2 p1(5.0, -5.0);
+    glm::vec2 p2(5.0, 5.0);
     distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
@@ -75,8 +75,8 @@ inline float calculateNearestWallCost(float x, float y, float angle)
         wallOrientation = 270.0;
     }
     //bottom wall
-    p1 = glm::vec2(4.5, 4.5);
-    p2 = glm::vec2(-4.5, 4.5);
+    p1 = glm::vec2(5.0, 5.0);
+    p2 = glm::vec2(-5.0, 5.0);
     distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
@@ -84,8 +84,8 @@ inline float calculateNearestWallCost(float x, float y, float angle)
         wallOrientation = 180.0;
     }
     //left wall
-    p1 = glm::vec2(-4.5, -4.5);
-    p2 = glm::vec2(-4.5, 4.5);
+    p1 = glm::vec2(-5.0, -5.0);
+    p2 = glm::vec2(-5.0, 5.0);
     distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
@@ -93,8 +93,8 @@ inline float calculateNearestWallCost(float x, float y, float angle)
         wallOrientation = 90.0;
     }
     //top wall
-    p1 = glm::vec2(4.5, -4.5);
-    p2 = glm::vec2(-4.5, -4.5);
+    p1 = glm::vec2(5.0, -5.0);
+    p2 = glm::vec2(-5.0, -5.0);
     distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
@@ -103,7 +103,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     }
     
     cost = smallestDistance;
-    cost += fabsf(wallOrientation - angle) * 0.05;
+    cost += fabsf(wallOrientation - angle) * 0.1;
     
     return cost;
 }
@@ -179,7 +179,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
         if(currentObject.type == 2)
         {
             
-            cost += 3.0f * calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
+            cost += 3.0f * fabsf(currentObject.width / 2.0f - calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle));
             cost += 3.0f * fabsf(currentObject.length - smallestPartnerDistance);
             cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
             //cost -= distanceToPartnerCost;
@@ -196,6 +196,9 @@ void Optimizer::modifySceneGraph()
     std::normal_distribution<float> distribution(0.0f, (0.7f * temperature));
     //std::uniform_real_distribution<> distribution(-4.5, 4.5);
     std::normal_distribution<float> angle(0.0f, temperature * 10.0f);
+    glm::vec2 addVec;
+    float angleChange;
+    
     
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
@@ -206,10 +209,12 @@ void Optimizer::modifySceneGraph()
             float objectWidth = modifiedGraph.children[i].width;
             float oldAngle = modifiedGraph.children[i].angle;
             
-            glm::vec2 addVec(distribution(gen), distribution(gen));
+            addVec = glm::vec2(distribution(gen), distribution(gen));
             newCenter += addVec;
             
-            oldAngle += angle(gen);
+            angleChange = angle(gen);
+            
+            oldAngle += angleChange;
             if(oldAngle < 0.0)
                 oldAngle += 360.0;
             else
@@ -269,72 +274,74 @@ void Optimizer::modifySceneGraph()
         {
             for(int j = 0; j < modifiedGraph.children[i].children.size(); j++)
             {
-                std::normal_distribution<float> childDistr(0.0f, (0.7f * temperature / 10.0f));
-                //modifiedGraph.children[i].children[j].position[0] = modifiedGraph.children[i].position[0];
-                //modifiedGraph.children[i].children[j].position[2] = modifiedGraph.children[i].position[2];
-                //modifiedGraph.children[i].children[j].setAngle(angle(gen));
-                while (true)
+                modifiedGraph.children[i].children[j].position.x += addVec.x;
+                modifiedGraph.children[i].children[j].position.z += addVec.y;
+                modifiedGraph.children[i].children[j].angle += angleChange;
+                while(true)
                 {
-                glm::vec2 newCenter(modifiedGraph.children[i].children[j].position[0], modifiedGraph.children[i].children[j].position[2]);
-                float objectLength = modifiedGraph.children[i].children[j].length;
-                float objectWidth = modifiedGraph.children[i].children[j].width;
-                float oldAngle = modifiedGraph.children[i].children[j].angle;
-                
-                glm::vec2 addVec(childDistr(gen), childDistr(gen));
-                newCenter += addVec;
-                
-                oldAngle += angle(gen);
-                if(oldAngle < 0.0)
-                    oldAngle += 360.0;
-                else
-                {
-                    while(oldAngle > 360.0)
-                    {
-                        oldAngle -= 360.0;
-                    }
-                }
-                
-                glm::vec2 p1(newCenter[0] - (objectLength / 2.0),
-                             newCenter[1] - (objectWidth / 2.0));
-                
-                glm::vec2 p2(newCenter[0] + (objectLength / 2.0),
-                             newCenter[1] - (objectWidth / 2.0));
-                
-                glm::vec2 p3(newCenter[0] + (objectLength / 2.0),
-                             newCenter[1] + (objectWidth / 2.0));
-                
-                glm::vec2 p4(newCenter[0] - (objectLength / 2.0),
-                             newCenter[1] + (objectWidth / 2.0));
-                
-                p1 = getRotatedPoint(oldAngle, p1[0], p1[1], newCenter[0], newCenter[1]);
-                
-                //std::cout << p1.x << std::endl;
-                
-                if(p1[0] < -1.5 || p1[0] > 1.5)
-                    continue;
-                if(p1[1] < -1.0 || p1[1] > 1.0)
-                    continue;
-                
-                p2 = getRotatedPoint(oldAngle, p2[0], p2[1], newCenter[0], newCenter[1]);
-                if(p2[0] < -1.5 || p2[0] > 1.5)
-                    continue;
-                if(p2[1] < -1.0 || p2[1] > 1.0)
-                    continue;
-                
-                p3 = getRotatedPoint(oldAngle, p3[0], p3[1], newCenter[0], newCenter[1]);
-                if(p3[0] < -1.5 || p3[0] > 1.5)
-                    continue;
-                if(p3[1] < -1.0 || p3[1] > 1.0)
-                    continue;
-                
-                p4 = getRotatedPoint(oldAngle, p4[0], p4[1], newCenter[0], newCenter[1]);
-                if(p4[0] < -1.5 || p4[0] > 1.5)
-                    continue;
-                if(p4[1] < -1.0 || p4[1] > 1.0)
-                    continue;
-                    modifiedGraph.children[i].children[j].position[0] = newCenter[0];
-                    modifiedGraph.children[i].children[j].position[2] = newCenter[1];
-                    modifiedGraph.children[i].children[j].angle = oldAngle;
+                    //std::cout << "blub" << std::endl;
+                    std::normal_distribution<float> childDistr(0.0f, (0.7f * temperature / 10.0f));
+                    glm::vec2 childCenter(modifiedGraph.children[i].children[j].position.x, modifiedGraph.children[i].children[j].position.z);
+                    float childAngle = modifiedGraph.children[i].children[j].angle;
+                    float childLength = modifiedGraph.children[i].children[j].length;
+                    float childWidth = modifiedGraph.children[i].children[j].width;
+                    
+                    float objectLength = modifiedGraph.children[i].length / 2.0f;
+                    float objectWidth = modifiedGraph.children[i].width / 2.0f;
+                    
+                    //move child center towards origin, subtract angle of parent object
+                    childCenter -= glm::vec2(modifiedGraph.children[i].position.x, modifiedGraph.children[i].position.z);
+                    childAngle -= modifiedGraph.children[i].angle;
+                    
+                    //modify center & angle of child
+                    childCenter += glm::vec2(childDistr(gen), childDistr(gen));
+                    childAngle += angle(gen);
+                    
+                    //test if new position is inside bounds of parent object
+                    //get bounding box points
+                    glm::vec2 p1(childCenter[0] - (childLength / 2.0),
+                                 childCenter[1] - (childWidth / 2.0));
+                    
+                    glm::vec2 p2(childCenter[0] + (childLength / 2.0),
+                                 childCenter[1] - (childWidth / 2.0));
+                    
+                    glm::vec2 p3(childCenter[0] + (childLength / 2.0),
+                                 childCenter[1] + (childWidth / 2.0));
+                    
+                    glm::vec2 p4(childCenter[0] - (childLength / 2.0),
+                                 childCenter[1] + (childWidth / 2.0));
+                    //get rotated points
+                    p1 = getRotatedPoint(childAngle, p1[0], p1[1], 0.0, 0.0);
+                    if(p1[0] < -objectLength || p1[0] > objectLength)
+                        continue;
+                    if(p1[1] < -objectWidth || p1[1] > objectWidth)
+                        continue;
+                    
+                    p2 = getRotatedPoint(childAngle, p2[0], p2[1], 0.0, 0.0);
+                    if(p2[0] < -objectLength || p2[0] > objectLength)
+                        continue;
+                    if(p2[1] < -objectWidth || p2[1] > objectWidth)
+                        continue;
+                    
+                    p3 = getRotatedPoint(childAngle, p3[0], p3[1], 0.0, 0.0);
+                    if(p3[0] < -objectLength || p3[0] > objectLength)
+                        continue;
+                    if(p3[1] < -objectWidth || p3[1] > objectWidth)
+                        continue;
+                    
+                    p4 = getRotatedPoint(childAngle, p4[0], p4[1], 0.0, 0.0);
+                    if(p4[0] < -objectLength || p4[0] > objectLength)
+                        continue;
+                    if(p4[1] < -objectWidth || p4[1] > objectWidth)
+                        continue;
+                    
+                    //move child center back according to parent position & angle
+                    childCenter += glm::vec2(modifiedGraph.children[i].position.x, modifiedGraph.children[i].position.z);
+                    childAngle += modifiedGraph.children[i].angle;
+                    //save new position and angle for child object
+                    modifiedGraph.children[i].children[j].position[0] = childCenter[0];
+                    modifiedGraph.children[i].children[j].position[2] = childCenter[1];
+                    modifiedGraph.children[i].children[j].setAngle(childAngle);
                     break;
                 }
             }
@@ -369,6 +376,9 @@ SceneObject Optimizer::optimize()
     //std::cout << copy.size() << std::endl;
     std::cout << "initial cost:" << calculateEnergy(&sceneGraph) << std::endl;
     
+    //glm::vec2 p1(0, 1);
+    //p1 = getRotatedPoint(-90, p1.x, p1.y, 0, 0);
+    
     while(temperature > 0.0)
     {
         for(int i = 0; i < 100; i++)
@@ -389,7 +399,7 @@ SceneObject Optimizer::optimize()
             }
             modifiedGraph = sceneGraph;
         }
-        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
+        std::cout << calculateEnergy(&sceneGraph) << std::endl;
         temperature -= coolingRate;
     }
     

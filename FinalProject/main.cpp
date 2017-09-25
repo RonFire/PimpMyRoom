@@ -47,7 +47,6 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
-    tableObject.setPosition(glm::vec3(1.0f, 0.0f, 1.5f));
 	tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
     tableObject.height = 1.2;
@@ -84,9 +83,10 @@ int main(int argc, const char * argv[]) {
             rootObject.children[i]  = optimizer.optimize();
         }
     }
- 
-    tableObject.setPosition(glm::vec3(0.0f, 0.0f, 4.5f));
-    rootObject.children.push_back(tableObject);
+    SceneObject tableObject2 = SceneObject();
+    tableObject2.setType(1);
+    tableObject2.setPosition(glm::vec3(0.0f, 0.0f, 4.5f));
+    rootObject.children.push_back(tableObject2);
     
 //	==================
 //	Visualization part
