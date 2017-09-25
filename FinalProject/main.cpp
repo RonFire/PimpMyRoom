@@ -50,6 +50,8 @@ int main(int argc, const char * argv[]) {
 	tableObject.children.push_back(bookObject);
     tableObject.children.push_back(bookObject);
     tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
     tableObject.height = 1.2;
     tableObject.width = 3.0;
@@ -65,10 +67,14 @@ int main(int argc, const char * argv[]) {
 	floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
+    floorObject.children.push_back(firstChairObject);
     
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
+
     
 	SceneObject rootObject = SceneObject();
 	rootObject.setType(99);

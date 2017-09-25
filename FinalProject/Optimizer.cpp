@@ -165,7 +165,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                 }
                 if(currentObject.type == 1 && compareObject.type == 0)
                 {
-                    cost += fabsf((currentObject.diagLength + compareObject.diagLength) - dist(glm::vec2(currentObject.position.x, currentObject.position.z), glm::vec2(compareObject.position.x, compareObject.position.z)));
+                    cost += 3 * fabsf((currentObject.diagLength + compareObject.diagLength) - dist(glm::vec2(currentObject.position.x, currentObject.position.z), glm::vec2(compareObject.position.x, compareObject.position.z)));
                     float angle = atan2(currentObject.position.x - compareObject.position.x, currentObject.position.z - compareObject.position.z);
                     angle *= (180.0f/M_PI);
                     if(angle < 0.0f)
@@ -174,32 +174,51 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                     
                     //calculateTableDistanceCost(currentObject.boundingBox, currentObject.position, compareObject.position, compareObject.angle);
                 }
+                if(currentObject.type == 0 && compareObject.type == 0)
+                {
+                    if(distanceToPartnerObject < 0.1)
+                        cost += 4 * (1/0.1);
+                    else
+                        cost += 4 * (1 / distanceToPartnerObject);
+                }
             }
         }
         if(currentObject.children.size() != 0)
         {
             for(int k = 0; k < currentObject.children.size(); k++)
             {
+                SceneObject childObject = currentObject.children[k];
+                float smallestDist = 1000;
+                float partnerAngle;
                 for(int l = 0; l < currentObject.children.size(); l++)
                 {
                     if(k != l)
                     {
-                        SceneObject childObject = currentObject.children[k];
                         SceneObject compareChild = currentObject.children[l];
                         float distanceToOtherChild = sqrtf(powf(childObject.position[0] - compareChild.position[0], 2.0) + powf(childObject.position[2] - compareChild.position[2], 2.0));
                         cost += fmaxf(0.0, 1.0 - (distanceToOtherChild / (childObject.diagLength + compareChild.diagLength)));
-                        //cost += 1.0/distanceToOtherChild;
+                        if(distanceToOtherChild < smallestDist)
+                        {
+                            smallestDist = distanceToOtherChild;
+                            partnerAngle = compareChild.angle;
+                        }
                     }
                 }
+                cost += fabsf(childObject.length - smallestDist) + fabsf(childObject.angle - partnerAngle) * 0.05;
             }
         }
         if(currentObject.type == 2)
         {
             cost += 3.0f * fabsf(currentObject.width / 2.0f - calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle));
-            cost += 3.0f * fabsf(currentObject.length - smallestPartnerDistance);
+            if(smallestPartnerDistance != 1000)
+                cost += 3.0f * fabsf(currentObject.length - smallestPartnerDistance);
             cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
             //cost -= distanceToPartnerCost;
             
+        }
+        if(currentObject.type == 1)
+        {
+            cost += dist(glm::vec2(currentObject.position.x, currentObject.position.z), glm::vec2(0, 0));
         }
     }
     return cost;
