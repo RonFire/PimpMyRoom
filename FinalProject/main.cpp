@@ -48,6 +48,8 @@ int main(int argc, const char * argv[]) {
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
 	tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
     tableObject.height = 1.2;
     tableObject.width = 3.0;
