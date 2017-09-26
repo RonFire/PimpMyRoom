@@ -174,16 +174,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                     //chairs shall be oriented towards the table
                     float angle = (180.0f/M_PI) * atan2(currentObject.position.x - compareObject.position.x,
                                                         currentObject.position.z - compareObject.position.z);
-                    while(angle > 360)
-                        angle -= 360;
-                    while(angle < 0)
-                        angle += 360;
-                    float angle2 = compareObject.angle;
-                    while(angle2 > 360)
-                        angle2 -= 360;
-                    while(angle2 < 0)
-                        angle2 += 360;
-                    cost += fminf(fabs(angle - angle2), 360 - fabs(angle - angle2)) * 0.1;
+                    cost += fabsf(angle - compareObject.angle) * 0.1;
                 }
                 //cost penalizing chairs the closer they stand together
                 if(currentObject.type == 0 && compareObject.type == 0)
@@ -233,7 +224,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
             std::vector<float> costVec = calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
 
             //cost penalizing difference of distance to target distance (=currentObject.width; objects should stand "shoulder to shoulder")
-            cost += 3.0f * fabsf((currentObject.width / 2.0f) - costVec[0]);
+            cost += 4.0f * fabsf((currentObject.width / 2.0f) - costVec[0]);
             float angle = currentObject.angle;
             while(angle > 360)
                 angle -= 360;
@@ -448,7 +439,7 @@ SceneObject Optimizer::optimize()
             //else, reset the modification
             modifiedGraph = sceneGraph;
         }
-        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
+        std::cout << calculateEnergy(&sceneGraph) << std::endl;
         //reduce the temperature afterwards
         temperature -= coolingRate;
     }
