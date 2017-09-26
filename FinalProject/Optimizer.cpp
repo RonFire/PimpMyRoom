@@ -8,40 +8,47 @@
 
 #include "Optimizer.hpp"
 
+//helper function to directly input degree
 inline float sinDeg(float angle)
 {
     return  sin(angle * M_PI/180.0);
 }
 
+//helper function to directly input degree
 inline float cosDeg(float angle)
 {
     return  cos(angle * M_PI/180.0);
 }
 
+//function to return a point (px, py) rotated around another point (cx, cy) by angle degrees
 inline glm::vec2 getRotatedPoint(float angle, float px, float py, float cx, float cy)
 {
     return glm::vec2(cosDeg(angle) * (px - cx) + sinDeg(angle) * (py - cy) + cx,
                     -sinDeg(angle) * (px - cx) + cosDeg(angle) * (py - cy) + cy);
 }
 
+//returns dot product
 inline double dot(glm::vec2 u, glm::vec2 v)
 {
     return (u.x * v.x + u.y * v.y);
 }
 
+//returns norm (=length) of a vector
 inline double norm(glm::vec2 v)
 {
-    return sqrt(dot(v,v));  // norm = length of  vector
+    return sqrt(dot(v,v));
 }
 
+//calculates the distance of two points
 inline double dist(glm::vec2 u, glm::vec2 v)
 {
     return norm(u - v);
 }
 
-inline float getDistanceToNearestWall(glm::vec2 s1, glm::vec2 s2, glm::vec2 p)
+//function to return distance of point p to the segment defined by s1 -> s2
+//found online: http://geomalgorithms.com/a02-_lines.html
+inline float getDistanceToNearestSegment(glm::vec2 s1, glm::vec2 s2, glm::vec2 p)
 {
-    //return fabsf((l2y - l1y) * x - (l2x - l1x) * y + l2x * l1y - l2y *l1x) / sqrtf(powf((l2y - l1y), 2.0) + powf((l2x - l1x), 2.0));
     glm::vec2 v = s1 - s2;
     glm::vec2 w = p - s2;
     
@@ -58,6 +65,7 @@ inline float getDistanceToNearestWall(glm::vec2 s1, glm::vec2 s2, glm::vec2 p)
     return dist(p, p2);
 }
 
+//function to return the cost for a cupboard in relation to its nearest wall
 inline float calculateNearestWallCost(float x, float y, float angle)
 {
     float distance = 0.0;
@@ -68,7 +76,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     //right wall
     glm::vec2 p1(5.0, -5.0);
     glm::vec2 p2(5.0, 5.0);
-    distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
+    distance = getDistanceToNearestSegment(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
@@ -77,7 +85,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     //bottom wall
     p1 = glm::vec2(5.0, 5.0);
     p2 = glm::vec2(-5.0, 5.0);
-    distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
+    distance = getDistanceToNearestSegment(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
@@ -86,7 +94,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     //left wall
     p1 = glm::vec2(-5.0, -5.0);
     p2 = glm::vec2(-5.0, 5.0);
-    distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
+    distance = getDistanceToNearestSegment(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
@@ -95,7 +103,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     //top wall
     p1 = glm::vec2(5.0, -5.0);
     p2 = glm::vec2(-5.0, -5.0);
-    distance = getDistanceToNearestWall(p1, p2, glm::vec2(x, y));
+    distance = getDistanceToNearestSegment(p1, p2, glm::vec2(x, y));
     if(distance < smallestDistance)
     {
         smallestDistance = distance;
@@ -108,6 +116,7 @@ inline float calculateNearestWallCost(float x, float y, float angle)
     return cost;
 }
 
+//constructor
 Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, double coolingRateInput)
 {
     sceneGraph = sceneGraphInput;
@@ -115,65 +124,59 @@ Optimizer::Optimizer(SceneObject sceneGraphInput, double temperatureInput, doubl
     currentBestGraph = sceneGraphInput;
     temperature = temperatureInput;
     coolingRate = coolingRateInput;
-    factor = temperature + 1;
 };
 
+//energy function calculation
 double Optimizer::calculateEnergy(SceneObject* sceneGraph)
 {
-    //SceneObject table = sceneGraph->children[0];
-    //SceneObject chair = sceneGraph->children[1];
-    
-    //double distance = sqrt(pow(table.position[0] - chair.position[0], 2.0) + pow(table.position[2] - chair.position[2], 2.0));
-    
-    //return pow(4.0 - distance, 2.0);
-    
-    float cost = 0.0;
     SceneObject currentObject;
     SceneObject compareObject;
+    float cost = 0.0;
     float distanceToPartnerObject;
     float smallestPartnerDistance;
-    float distanceToPartnerCost;
     float partnerAngle;
     
     for(int i = 0; i < sceneGraph->children.size(); i++)
     {
         currentObject = sceneGraph->children[i];
-        distanceToPartnerObject = 0.0;
         smallestPartnerDistance = 1000.0;
-        partnerAngle = 0.0;
         
         for(int j = 0; j < sceneGraph->children.size(); j++)
         {
             compareObject = sceneGraph->children[j];
+            
             //cost to keep the door free of objects
             cost += fmaxf(0.0, 1.0 - (sqrtf(powf(currentObject.position[0] - 0.0f, 2.0) + powf(currentObject.position[2] - 4.0f, 2.0)) / (currentObject.diagLength + sqrtf(8.0f)/2.0f)));
+            
+            //an object should not have costs in relation to itself
             if(i != j)
             {
-                //distanceToPartnerObject = dist(glm::vec2(currentObject.position.x, currentObject.position.z),
-                //                               glm::vec2(compareObject.position.x, compareObject.position.z));
-                distanceToPartnerObject = sqrtf(powf(currentObject.position[0] - compareObject.position[0], 2.0) + powf(currentObject.position[2] - compareObject.position[2], 2.0));
+                //general cost penalizing collision between objects
+                distanceToPartnerObject = sqrtf(powf(currentObject.position[0] - compareObject.position[0], 2.0) +
+                                                powf(currentObject.position[2] - compareObject.position[2], 2.0));
                 cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.diagLength + compareObject.diagLength)));
-                //cost += fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.length/2.0f + compareObject.length/2.0f)));
+                
+                //cost penalizing if a cupboard has no close neighbor, cost will be added after checking every other cupboard
                 if(currentObject.type == 2 && compareObject.type == 2)
                 {
                     if(distanceToPartnerObject < smallestPartnerDistance)
                     {
                         smallestPartnerDistance = distanceToPartnerObject;
                         partnerAngle = compareObject.angle;
-                        distanceToPartnerCost = fmaxf(0.0, 1.0 - (distanceToPartnerObject / (currentObject.diagLength + compareObject.diagLength)));
                     }
                 }
+                
+                //cost penalizing chairs that are not positioned around the table/centered towards its center
                 if(currentObject.type == 1 && compareObject.type == 0)
                 {
+                    //chairs shall be placed a distance of (tableDiagLength + chairDiagLength) from the table
                     cost += 3 * fabsf((currentObject.diagLength + compareObject.diagLength) - dist(glm::vec2(currentObject.position.x, currentObject.position.z), glm::vec2(compareObject.position.x, compareObject.position.z)));
-                    float angle = atan2(currentObject.position.x - compareObject.position.x, currentObject.position.z - compareObject.position.z);
-                    angle *= (180.0f/M_PI);
-                    if(angle < 0.0f)
-                        angle += 360.0f;
+                    //chairs shall be oriented towards the table
+                    float angle = (180.0f/M_PI) * atan2(currentObject.position.x - compareObject.position.x,
+                                                        currentObject.position.z - compareObject.position.z);
                     cost += fabs(angle - compareObject.angle) * 0.1;
-                    
-                    //calculateTableDistanceCost(currentObject.boundingBox, currentObject.position, compareObject.position, compareObject.angle);
                 }
+                //cost penalizing chairs the closer they stand together
                 if(currentObject.type == 0 && compareObject.type == 0)
                 {
                     if(distanceToPartnerObject < 0.1)
@@ -183,6 +186,8 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                 }
             }
         }
+        
+        //second level cost calculation (in this case for books on the table)
         if(currentObject.children.size() != 0)
         {
             for(int k = 0; k < currentObject.children.size(); k++)
@@ -190,13 +195,17 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                 SceneObject childObject = currentObject.children[k];
                 float smallestDist = 1000;
                 float partnerAngle;
+                
                 for(int l = 0; l < currentObject.children.size(); l++)
                 {
                     if(k != l)
                     {
                         SceneObject compareChild = currentObject.children[l];
-                        float distanceToOtherChild = sqrtf(powf(childObject.position[0] - compareChild.position[0], 2.0) + powf(childObject.position[2] - compareChild.position[2], 2.0));
+                        //cost penalizing object collision
+                        float distanceToOtherChild = sqrtf(powf(childObject.position[0] - compareChild.position[0], 2.0) +
+                                                           powf(childObject.position[2] - compareChild.position[2], 2.0));
                         cost += fmaxf(0.0, 1.0 - (distanceToOtherChild / (childObject.diagLength + compareChild.diagLength)));
+                        //saving distance to closest partner object
                         if(distanceToOtherChild < smallestDist)
                         {
                             smallestDist = distanceToOtherChild;
@@ -204,39 +213,40 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                         }
                     }
                 }
-                cost += fabsf(childObject.length - smallestDist) + fabsf(childObject.angle - partnerAngle) * 0.05;
+                //cost penalizing distance from partner, as well as difference in angle
+                cost += 2.0f * fabsf(childObject.length - smallestDist) + fabsf(childObject.angle - partnerAngle) * 0.0001;
             }
         }
+        
+        //extra costs for cupboards
         if(currentObject.type == 2)
         {
-            cost += 3.0f * fabsf(currentObject.width / 2.0f - calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle));
+            //cost penalizing difference of distance to target distance (=currentObject.width; objects should stand "shoulder to shoulder")
+            cost += 3.0f * fabsf((currentObject.width / 2.0f) -
+                                 calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle));
+            //check in case we only have one cupboard, so smallestPartnerDistance still has the initial 1000 value
             if(smallestPartnerDistance != 1000)
                 cost += 3.0f * fabsf(currentObject.length - smallestPartnerDistance);
             cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
-            //cost -= distanceToPartnerCost;
-            
-        }
-        if(currentObject.type == 1)
-        {
-            cost += dist(glm::vec2(currentObject.position.x, currentObject.position.z), glm::vec2(0, 0));
         }
     }
     return cost;
 };
 
+//function for generating the next candidate for testing
 void Optimizer::modifySceneGraph()
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    //using gauss distributions depending on the current temperature
     std::normal_distribution<float> distribution(0.0f, (0.7f * temperature));
-    //std::uniform_real_distribution<> distribution(-4.5, 4.5);
     std::normal_distribution<float> angle(0.0f, temperature * 10.0f);
     glm::vec2 addVec;
     float angleChange;
     
-    
     for(int i = 0; i < modifiedGraph.children.size(); i++)
     {
+        //calculate a new position and angle for the object until we found one that is valid
         while(true)
         {
             glm::vec2 newCenter(modifiedGraph.children[i].position[0], modifiedGraph.children[i].position[2]);
@@ -247,9 +257,11 @@ void Optimizer::modifySceneGraph()
             addVec = glm::vec2(distribution(gen), distribution(gen));
             angleChange = angle(gen);
             
+            //modify center and angle of object
             newCenter += addVec;
             newAngle += angleChange;
             
+            //calculate bounding box
             glm::vec2 p1(newCenter[0] - (objectLength / 2.0),
                          newCenter[1] - (objectWidth / 2.0));
             
@@ -262,43 +274,40 @@ void Optimizer::modifySceneGraph()
             glm::vec2 p4(newCenter[0] - (objectLength / 2.0),
                          newCenter[1] + (objectWidth / 2.0));
             
+            //calculate rotated bounding box according to object angle and test if values are inbounds of the room
             p1 = getRotatedPoint(newAngle, p1[0], p1[1], newCenter[0], newCenter[1]);
-            
-            //std::cout << p1.x << std::endl;
-            
-            if(p1[0] < -5.0 || p1[0] > 5.0)
-                continue;
-            if(p1[1] < -5.0 || p1[1] > 5.0)
+            if(p1[0] < -5.0 || p1[0] > 5.0 || p1[1] < -5.0 || p1[1] > 5.0)
                 continue;
             
             p2 = getRotatedPoint(newAngle, p2[0], p2[1], newCenter[0], newCenter[1]);
-            if(p2[0] < -5.0 || p2[0] > 5.0)
-                continue;
-            if(p2[1] < -5.0 || p2[1] > 5.0)
+            if(p2[0] < -5.0 || p2[0] > 5.0 || p2[1] < -5.0 || p2[1] > 5.0)
                 continue;
             
             p3 = getRotatedPoint(newAngle, p3[0], p3[1], newCenter[0], newCenter[1]);
-            if(p3[0] < -5.0 || p3[0] > 5.0)
-                continue;
-            if(p3[1] < -5.0 || p3[1] > 5.0)
+            if(p3[0] < -5.0 || p3[0] > 5.0 || p3[1] < -5.0 || p3[1] > 5.0)
                 continue;
             
             p4 = getRotatedPoint(newAngle, p4[0], p4[1], newCenter[0], newCenter[1]);
-            if(p4[0] < -5.0 || p4[0] > 5.0)
-                continue;
-            if(p4[1] < -5.0 || p4[1] > 5.0)
+            if(p4[0] < -5.0 || p4[0] > 5.0 || p4[1] < -5.0 || p4[1] > 5.0)
                 continue;
             
+            //if all values are valid, save them and break the while loop
             modifiedGraph.children[i].boundingBox = glm::mat4x2(p1, p2, p3, p4);
             modifiedGraph.children[i].position[0] = newCenter[0];
             modifiedGraph.children[i].position[2] = newCenter[1];
             modifiedGraph.children[i].setAngle(newAngle);
             break;
         }
+        
+        //same as above for tier 2 (=objects on other objects)
         if(modifiedGraph.children[i].children.size() != 0)
         {
+            //using gauss distributions depending on the current temperature with smaller values
+            std::normal_distribution<float> childDistr(0.0f, (0.7f * temperature * 0.2));
+            
             for(int j = 0; j < modifiedGraph.children[i].children.size(); j++)
             {
+                //move and rotate child object with the parent object
                 modifiedGraph.children[i].children[j].position[0] += addVec.x;
                 modifiedGraph.children[i].children[j].position[2] += addVec.y;
                 modifiedGraph.children[i].children[j].angle += angleChange;
@@ -307,9 +316,6 @@ void Optimizer::modifySceneGraph()
                 
                 while(true)
                 {
-                    //std::cout << "blub" << std::endl;
-                    std::normal_distribution<float> childDistr(0.0f, (0.7f * temperature * 0.2));
-                    
                     glm::vec2 childCenter(modifiedGraph.children[i].children[j].position[0],
                                           modifiedGraph.children[i].children[j].position[2]);
                     float childAngle = modifiedGraph.children[i].children[j].angle;
@@ -342,29 +348,22 @@ void Optimizer::modifySceneGraph()
                     
                     glm::vec2 p4(childCenter[0] - (childLength / 2.0),
                                  childCenter[1] + (childWidth / 2.0));
-                    //get rotated points
+                    
+                    //calculate rotated bounding box according to object angle and test if values are inbounds of parent bounds
                     p1 = getRotatedPoint(childAngle, p1[0], p1[1], childCenter.x, childCenter.y);
-                    if(p1[0] < -objectLength || p1[0] > objectLength)
-                        continue;
-                    if(p1[1] < -objectWidth || p1[1] > objectWidth)
+                    if(p1[0] < -objectLength || p1[0] > objectLength || p1[1] < -objectWidth || p1[1] > objectWidth)
                         continue;
                     
                     p2 = getRotatedPoint(childAngle, p2[0], p2[1], childCenter.x, childCenter.y);
-                    if(p2[0] < -objectLength || p2[0] > objectLength)
-                        continue;
-                    if(p2[1] < -objectWidth || p2[1] > objectWidth)
+                    if(p2[0] < -objectLength || p2[0] > objectLength || p2[1] < -objectWidth || p2[1] > objectWidth)
                         continue;
                     
                     p3 = getRotatedPoint(childAngle, p3[0], p3[1], childCenter.x, childCenter.y);
-                    if(p3[0] < -objectLength || p3[0] > objectLength)
-                        continue;
-                    if(p3[1] < -objectWidth || p3[1] > objectWidth)
+                    if(p3[0] < -objectLength || p3[0] > objectLength || p3[1] < -objectWidth || p3[1] > objectWidth)
                         continue;
                     
                     p4 = getRotatedPoint(childAngle, p4[0], p4[1], childCenter.x, childCenter.y);
-                    if(p4[0] < -objectLength || p4[0] > objectLength)
-                        continue;
-                    if(p4[1] < -objectWidth || p4[1] > objectWidth)
+                    if(p4[0] < -objectLength || p4[0] > objectLength || p4[1] < -objectWidth || p4[1] > objectWidth)
                         continue;
                     
                     childCenter = getRotatedPoint(parentAngle, childCenter[0], childCenter[1], 0, 0);
@@ -383,19 +382,13 @@ void Optimizer::modifySceneGraph()
     }
 };
 
-double Optimizer::calculateAcceptanceProbability(double currentEnergy, double newEnergy, int temp)
+double Optimizer::calculateAcceptanceProbability(double currentEnergy, double newEnergy)
 {
     // If the new solution is better, accept it
     if (newEnergy < currentEnergy) {
         return 1.0;
     }
-    // If the new solution is worse, calculate an acceptance probability
-    //std::cout << exp((currentEnergy - newEnergy) / (temperature/10.0)) <<  std::endl;
-    //std::cout << (logf(temperature) + 4.606) << std::endl;
-    //std::cout << temperature << std::endl;
-    //std::cout << (temperature/10.0) << std::endl;
-    //std::cout << expf(temperature -2)  << std::endl;
-    
+    //else calculate acceptance probability according to difference of solutions and temperature
     return exp((currentEnergy - newEnergy) / (temperature * 2.0f));
 };
 
@@ -404,24 +397,22 @@ SceneObject Optimizer::optimize()
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     std::uniform_real_distribution<> accept(0.0, 1.0);
+
+    std::cout << "Initial cost: " << calculateEnergy(&sceneGraph) << std::endl;
     
-    //calculateEnergy(&sceneGraph);
-    
-    //std::cout << copy.size() << std::endl;
-    std::cout << "initial cost:" << calculateEnergy(&sceneGraph) << std::endl;
-    
-    //glm::vec2 p1(0, 0);
-    //p1 = getRotatedPoint(-450, p1.x, p1.y, -1, -1);
-    
+    //main loop of the algorithm, as long as the temperature is greater that zero,
+    //generate new candidates and evaluate them
     while(temperature > 0.0)
     {
+        //we try to find an accepted new candidate 100 times, else we take the old graph
         for(int i = 0; i < 100; i++)
         {
             modifySceneGraph();
             double currentEnergy = calculateEnergy(&sceneGraph);
             double newEnergy = calculateEnergy(&modifiedGraph);
-            double prob = calculateAcceptanceProbability(currentEnergy, newEnergy, temperature);
-            //std::cout << calculateEnergy(&currentBestGraph) << std::endl;
+            double prob = calculateAcceptanceProbability(currentEnergy, newEnergy);
+            
+            //if a worse solution is accepted or a better one is found, save it and break the for loop
             if (prob > accept(gen))
             {
                 sceneGraph = modifiedGraph;
@@ -431,13 +422,15 @@ SceneObject Optimizer::optimize()
                 }
                 break;
             }
+            //else, reset the modification
             modifiedGraph = sceneGraph;
         }
-        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
+        
+        //reduce the temperature afterwards
         temperature -= coolingRate;
     }
     
-    std::cout << "best cost:" << calculateEnergy(&currentBestGraph) << std::endl;
+    std::cout << "Best cost: " << calculateEnergy(&currentBestGraph) << std::endl;
     
     return currentBestGraph;
 };

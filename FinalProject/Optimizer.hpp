@@ -21,11 +21,11 @@ class Optimizer
     
     double temperature;
     double coolingRate;
-    double factor;
     
-    double calculateEnergy(SceneObject* sceneGraph);
     void modifySceneGraph();
-    double calculateAcceptanceProbability(double currentEnergy, double newEnergy, int temperature);
+    double calculateEnergy(SceneObject* sceneGraph);
+    double calculateAcceptanceProbability(double currentEnergy, double newEnergy);
+    
 public:
     Optimizer(SceneObject sceneGraphInput, double temperatureInput, double coolingRateInput);
     SceneObject optimize();

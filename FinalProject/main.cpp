@@ -31,7 +31,6 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
-    //cupboardObject.setPosition(glm::vec3(4.5f, 0.0f, 4.5f));
     cupboardObject.length = 1.0;
     cupboardObject.height = 2.0;
 	cupboardObject.width = 1.0;
@@ -47,15 +46,15 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
-	tableObject.children.push_back(bookObject);
-    tableObject.children.push_back(bookObject);
-    tableObject.children.push_back(bookObject);
-    tableObject.children.push_back(bookObject);
-    tableObject.children.push_back(bookObject);
     tableObject.length = 2.0;
     tableObject.height = 1.2;
     tableObject.width = 3.0;
     tableObject.init();
+    tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
+    tableObject.children.push_back(bookObject);
     
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
@@ -67,8 +66,6 @@ int main(int argc, const char * argv[]) {
 	floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
-    floorObject.children.push_back(firstChairObject);
-    
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
@@ -91,10 +88,6 @@ int main(int argc, const char * argv[]) {
             rootObject.children[i]  = optimizer.optimize();
         }
     }
-    SceneObject tableObject2 = SceneObject();
-    tableObject2.setType(1);
-    tableObject2.setPosition(glm::vec3(0.0f, 0.0f, 4.5f));
-    rootObject.children.push_back(tableObject2);
     
 //	==================
 //	Visualization part
