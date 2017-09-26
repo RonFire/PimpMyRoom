@@ -45,6 +45,7 @@ public:
 	float MovementSpeed;
 	float MouseSensitivity;
 	float Zoom;
+	GLboolean restricted = true;
 
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVTY), Zoom(ZOOM)
 	{
@@ -82,16 +83,38 @@ public:
 			Position -= Right * velocity;
 		if (direction == RIGHT)
 			Position += Right * velocity;
-//		if (Position.x >= 4.85)
-//			Position.x = 4.85;
-//		if (Position.x <= -4.85)
-//			Position.x = -4.85;
-//		if (Position.z >= 4.85)
-//			Position.z = 4.85;
-//		if (Position.z <= -4.85)
-//			Position.z = -4.85;
+		if (restricted)
+		{
+		  if (Position.x >= 4.85)
+			  Position.x = 4.85;
+		  if (Position.x <= -4.85)
+			  Position.x = -4.85;
+		  if (Position.z >= 4.85)
+			  Position.z = 4.85;
+		  if (Position.z <= -4.85)
+			  Position.z = -4.85;
 		
-//		Position.y = 1.26f; // make camera stay on same height
+		  Position.y = 1.26f; // make camera stay on same height
+		}
+	}
+	
+	void ProcessRestriction()
+	{
+		if (restricted == true) {
+			restricted = false;
+		} else if (restricted == false) {
+			restricted = true;
+			if (Position.x >= 4.85)
+			Position.x = 4.85;
+			if (Position.x <= -4.85)
+			Position.x = -4.85;
+			if (Position.z >= 4.85)
+			Position.z = 4.85;
+			if (Position.z <= -4.85)
+			Position.z = -4.85;
+			
+			Position.y = 1.26f;
+		}
 	}
 	
 	// Processes input received from a mouse input system. Expects the offset value in both the x and y direction.
