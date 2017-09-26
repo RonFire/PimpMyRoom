@@ -66,12 +66,12 @@ inline float getDistanceToNearestSegment(glm::vec2 s1, glm::vec2 s2, glm::vec2 p
 }
 
 //function to return the cost for a cupboard in relation to its nearest wall
-inline float calculateNearestWallCost(float x, float y, float angle)
+inline std::vector<float> calculateNearestWallCost(float x, float y, float angle)
 {
     float distance = 0.0;
     float smallestDistance = 1000.0;
     float wallOrientation = 0.0;
-    float cost = 0.0;
+    std::vector<float> cost;
     
     //right wall
     glm::vec2 p1(5.0, -5.0);
@@ -109,9 +109,9 @@ inline float calculateNearestWallCost(float x, float y, float angle)
         smallestDistance = distance;
         wallOrientation = 0.0;
     }
-    
-    cost = smallestDistance;
-    cost += fabsf(wallOrientation - angle) * 0.1;
+
+    cost.push_back(smallestDistance);
+    cost.push_back(wallOrientation);
     
     return cost;
 }
@@ -174,7 +174,16 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                     //chairs shall be oriented towards the table
                     float angle = (180.0f/M_PI) * atan2(currentObject.position.x - compareObject.position.x,
                                                         currentObject.position.z - compareObject.position.z);
-                    cost += fabs(angle - compareObject.angle) * 0.1;
+                    while(angle > 360)
+                        angle -= 360;
+                    while(angle < 0)
+                        angle += 360;
+                    float angle2 = compareObject.angle;
+                    while(angle2 > 360)
+                        angle2 -= 360;
+                    while(angle2 < 0)
+                        angle2 += 360;
+                    cost += fminf(fabs(angle - angle2), 360 - fabs(angle - angle2)) * 0.1;
                 }
                 //cost penalizing chairs the closer they stand together
                 if(currentObject.type == 0 && compareObject.type == 0)
@@ -194,7 +203,7 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
             {
                 SceneObject childObject = currentObject.children[k];
                 float smallestDist = 1000;
-                float partnerAngle;
+                float partnerChildAngle;
                 
                 for(int l = 0; l < currentObject.children.size(); l++)
                 {
@@ -209,25 +218,39 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                         if(distanceToOtherChild < smallestDist)
                         {
                             smallestDist = distanceToOtherChild;
-                            partnerAngle = compareChild.angle;
+                            partnerChildAngle = compareChild.angle;
                         }
                     }
                 }
                 //cost penalizing distance from partner, as well as difference in angle
-                cost += 2.0f * fabsf(childObject.length - smallestDist) + fabsf(childObject.angle - partnerAngle) * 0.0001;
+                cost += 2.0f * fabsf(childObject.length - smallestDist) + fabsf(childObject.angle - partnerChildAngle) * 0.0001;
             }
         }
         
         //extra costs for cupboards
         if(currentObject.type == 2)
         {
+            std::vector<float> costVec = calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle);
+
             //cost penalizing difference of distance to target distance (=currentObject.width; objects should stand "shoulder to shoulder")
-            cost += 3.0f * fabsf((currentObject.width / 2.0f) -
-                                 calculateNearestWallCost(currentObject.position[0], currentObject.position[2], currentObject.angle));
+            cost += 3.0f * fabsf((currentObject.width / 2.0f) - costVec[0]);
+            float angle = currentObject.angle;
+            while(angle > 360)
+                angle -= 360;
+            while(angle < 0)
+                angle += 360;
+            
+            cost += fminf(fabsf(costVec[1] - angle), 360 - fabsf(costVec[1] - angle)) * 0.1;
             //check in case we only have one cupboard, so smallestPartnerDistance still has the initial 1000 value
             if(smallestPartnerDistance != 1000)
+            {
+                while(partnerAngle > 360)
+                    partnerAngle -= 360;
+                while(partnerAngle < 0)
+                    partnerAngle += 360;
                 cost += 3.0f * fabsf(currentObject.length - smallestPartnerDistance);
-            cost += fabsf(partnerAngle - currentObject.angle) * 0.1f;
+                cost += fminf(fabsf(partnerAngle - angle), 360 - fabsf(partnerAngle - angle)) * 0.1f;
+            }
         }
     }
     return cost;
@@ -239,8 +262,8 @@ void Optimizer::modifySceneGraph()
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     //using gauss distributions depending on the current temperature
-    std::normal_distribution<float> distribution(0.0f, (0.7f * temperature));
-    std::normal_distribution<float> angle(0.0f, temperature * 10.0f);
+    std::normal_distribution<float> distribution(0.0f, 0.5 * temperature);
+    std::normal_distribution<float> angle(0.0f, temperature * 5.0f);
     glm::vec2 addVec;
     float angleChange;
     
@@ -389,7 +412,7 @@ double Optimizer::calculateAcceptanceProbability(double currentEnergy, double ne
         return 1.0;
     }
     //else calculate acceptance probability according to difference of solutions and temperature
-    return exp((currentEnergy - newEnergy) / (temperature * 2.0f));
+    return exp((currentEnergy - newEnergy) / (temperature * 2.0));
 };
 
 SceneObject Optimizer::optimize()
@@ -425,7 +448,7 @@ SceneObject Optimizer::optimize()
             //else, reset the modification
             modifiedGraph = sceneGraph;
         }
-        
+        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
         //reduce the temperature afterwards
         temperature -= coolingRate;
     }

@@ -77,6 +77,7 @@ int main(int argc, const char * argv[]) {
 	floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
+    floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
@@ -96,6 +97,7 @@ int main(int argc, const char * argv[]) {
     {
         if(rootObject.children[i].type == 10)
         {
+            //initialize optimizer with 10000 temperature steps
             Optimizer optimizer(rootObject.children[i], 1.0f, 0.0001f);
             rootObject.children[i]  = optimizer.optimize();
         }
