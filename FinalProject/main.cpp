@@ -24,17 +24,19 @@ int main(int argc, const char * argv[]) {
     
 	SceneObject firstChairObject = SceneObject();
 	firstChairObject.setType(0);
-    firstChairObject.length = 1.0;
+    firstChairObject.length = 1.4;
     firstChairObject.height = 1.0;
-    firstChairObject.width = 1.0;
+    firstChairObject.width = 1.44;
     firstChairObject.init();
-	
+	firstChairObject.setPath("resource/armchair/fauteuil.obj");
+    
 	SceneObject cupboardObject = SceneObject();
 	cupboardObject.setType(2);
-    cupboardObject.length = 1.0;
+    cupboardObject.length = 1.31;
     cupboardObject.height = 2.0;
 	cupboardObject.width = 1.0;
     cupboardObject.init();
+    cupboardObject.setPath("resource/cupboard/cupboard.obj");
     
 	SceneObject bookObject = SceneObject();
 	bookObject.setType(20);
@@ -46,15 +48,20 @@ int main(int argc, const char * argv[]) {
 	
 	SceneObject tableObject = SceneObject();
 	tableObject.setType(1);
-    tableObject.length = 2.0;
+    tableObject.length = 1.62;
     tableObject.height = 1.2;
-    tableObject.width = 3.0;
+    tableObject.width = 2.82;
     tableObject.init();
+    tableObject.setPath("resource/table/table.obj");
     tableObject.children.push_back(bookObject);
     tableObject.children.push_back(bookObject);
     tableObject.children.push_back(bookObject);
     tableObject.children.push_back(bookObject);
     tableObject.children.push_back(bookObject);
+    
+    SceneObject door = SceneObject();
+    door.setType(3);
+    door.setPosition(glm::vec3(0.0f, 0.0f, 4.99f));
     
 	SceneObject wallObject = SceneObject();
 	wallObject.setType(11);
