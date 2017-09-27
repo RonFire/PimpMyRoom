@@ -70,27 +70,28 @@ int main(int argc, const char * argv[]) {
 	SceneObject ceilingObject = SceneObject();
 	ceilingObject.setType(12);
 	
-	SceneObject floorObject = SceneObject();
-	floorObject.setType(10);
-	floorObject.setPosition(glm::vec3(0.0));
-	floorObject.children.push_back(tableObject);
-	floorObject.children.push_back(firstChairObject);
+    SceneObject floorObject = SceneObject();
+    floorObject.setType(10);
+    floorObject.setPosition(glm::vec3(0.0));
+    floorObject.children.push_back(tableObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
+    floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
-
+    floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
+    floorObject.children.push_back(cupboardObject);
     
-	SceneObject rootObject = SceneObject();
-	rootObject.setType(99);
-	rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
-	rootObject.children.push_back(wallObject);
-	rootObject.children.push_back(ceilingObject);
-	rootObject.children.push_back(floorObject);
-    
+    SceneObject rootObject = SceneObject();
+    rootObject.setType(99);
+    rootObject.setPosition(glm::vec3( 0.0f,  0.0f,  0.0f));
+    rootObject.children.push_back(wallObject);
+    rootObject.children.push_back(ceilingObject);
+    rootObject.children.push_back(floorObject);
     
     for(int i = 0; i < rootObject.children.size(); i++)
     {

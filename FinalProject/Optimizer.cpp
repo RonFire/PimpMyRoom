@@ -174,15 +174,15 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                     //chairs shall be oriented towards the table
                     float angle = (180.0f/M_PI) * atan2(currentObject.position.x - compareObject.position.x,
                                                         currentObject.position.z - compareObject.position.z);
-                    cost += fabsf(angle - compareObject.angle) * 0.1;
+                    cost += fabsf(angle - compareObject.angle) * 0.1f;
                 }
                 //cost penalizing chairs the closer they stand together
                 if(currentObject.type == 0 && compareObject.type == 0)
                 {
-                    if(distanceToPartnerObject < 0.1)
-                        cost += 4 * (1/0.1);
+                    if(distanceToPartnerObject < 0.1f)
+                        cost += (1.0f / 0.1f);
                     else
-                        cost += 4 * (1 / distanceToPartnerObject);
+                        cost += 3.0f * (1.0f / distanceToPartnerObject);
                 }
             }
         }
@@ -214,9 +214,10 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                     }
                 }
                 //cost penalizing distance from partner, as well as difference in angle
-                cost += 2.0f * fabsf(childObject.length - smallestDist) + fabsf(childObject.angle - partnerChildAngle) * 0.0001;
+                cost += fabsf(2.0f * childObject.diagLength - smallestDist) + fabsf(childObject.angle - partnerChildAngle) * 0.0001;
             }
         }
+
         
         //extra costs for cupboards
         if(currentObject.type == 2)
@@ -243,6 +244,11 @@ double Optimizer::calculateEnergy(SceneObject* sceneGraph)
                 cost += fminf(fabsf(partnerAngle - angle), 360 - fabsf(partnerAngle - angle)) * 0.1f;
             }
         }
+        //cost to let the table be oriented according to the walls
+        if(currentObject.type == 1)
+        {
+            cost += fminf(fabsf(90 - currentObject.angle), fabsf(0 - currentObject.angle)) * 0.1;
+        }
     }
     return cost;
 };
@@ -253,7 +259,7 @@ void Optimizer::modifySceneGraph()
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
     //using gauss distributions depending on the current temperature
-    std::normal_distribution<float> distribution(0.0f, 0.5 * temperature);
+    std::normal_distribution<float> distribution(0.0f, 0.5f * temperature);
     std::normal_distribution<float> angle(0.0f, temperature * 5.0f);
     glm::vec2 addVec;
     float angleChange;
@@ -317,7 +323,7 @@ void Optimizer::modifySceneGraph()
         if(modifiedGraph.children[i].children.size() != 0)
         {
             //using gauss distributions depending on the current temperature with smaller values
-            std::normal_distribution<float> childDistr(0.0f, (0.7f * temperature * 0.2));
+            std::normal_distribution<float> childDistr(0.0f, (0.1f * temperature));
             
             for(int j = 0; j < modifiedGraph.children[i].children.size(); j++)
             {
@@ -404,6 +410,7 @@ double Optimizer::calculateAcceptanceProbability(double currentEnergy, double ne
     }
     //else calculate acceptance probability according to difference of solutions and temperature
     return exp((currentEnergy - newEnergy) / (temperature * 2.0));
+    //return exp((currentEnergy - newEnergy) / (0.5 / (1 + expf(-1 * ((temperature * 10)  - 5)))));
 };
 
 SceneObject Optimizer::optimize()
@@ -413,6 +420,8 @@ SceneObject Optimizer::optimize()
     std::uniform_real_distribution<> accept(0.0, 1.0);
 
     std::cout << "Initial cost: " << calculateEnergy(&sceneGraph) << std::endl;
+    
+    
     
     //main loop of the algorithm, as long as the temperature is greater that zero,
     //generate new candidates and evaluate them
@@ -439,7 +448,8 @@ SceneObject Optimizer::optimize()
             //else, reset the modification
             modifiedGraph = sceneGraph;
         }
-        std::cout << calculateEnergy(&sceneGraph) << std::endl;
+        
+        //std::cout << calculateEnergy(&sceneGraph) << std::endl;
         //reduce the temperature afterwards
         temperature -= coolingRate;
     }
