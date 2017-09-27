@@ -76,7 +76,7 @@ int main(int argc, const char * argv[]) {
     floorObject.children.push_back(tableObject);
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(firstChairObject);
-    floorObject.children.push_back(firstChairObject);
+    
     floorObject.children.push_back(firstChairObject);
     floorObject.children.push_back(cupboardObject);
     floorObject.children.push_back(cupboardObject);
