@@ -467,7 +467,13 @@ void processInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-	
+	static int oldState = GLFW_RELEASE;
+	int newState = glfwGetKey(window, GLFW_KEY_R);
+	if (newState == GLFW_RELEASE && oldState == GLFW_PRESS) {
+		camera.ProcessRestriction();
+	}
+	oldState = newState;
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)

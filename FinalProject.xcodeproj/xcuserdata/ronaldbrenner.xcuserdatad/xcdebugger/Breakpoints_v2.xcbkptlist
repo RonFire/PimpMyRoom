@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FinalProject/Camera.hpp"
-            timestampString = "525571244.408488"
+            timestampString = "528145454.809275"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "ProcessKeyboard(Camera_Movement direction, float deltaTime)"
             landmarkType = "7">
          </BreakpointContent>
